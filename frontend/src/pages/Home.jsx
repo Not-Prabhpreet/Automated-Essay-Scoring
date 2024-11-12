@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Brain, PenTool, CheckCircle, Star } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+gsap.registerPlugin(ScrollTrigger);
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,43 +16,66 @@ const Home = () => {
   const featuresRef = useRef(null);
 
   useEffect(() => {
+    // Set initial states first
+    gsap.set([headingRef.current, subheadingRef.current, ctaRef.current], {
+      opacity: 0,
+      y: 50
+    });
+  
+    gsap.set('.feature-card', {
+      opacity: 0,
+      y: 50
+    });
+  
     // Initial hero animations
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' }});
     
-    tl.from(headingRef.current, {
-      y: 50,
+    tl.to(headingRef.current, {
+      y: 0,
       opacity: 1,
       duration: 1
     })
-    .from(subheadingRef.current, {
-      y: 30,
+    .to(subheadingRef.current, {
+      y: 0,
       opacity: 1,
       duration: 1
-    }, "-=0.5")
-    .from(ctaRef.current, {
-      y: 20,
+    }, "-=0.7")
+    .to(ctaRef.current, {
+      y: 0,
       opacity: 1,
       duration: 0.8
-    }, "-=0.5");
-
+    }, "-=0.7");
+  
     // Features animation on scroll
-    gsap.from('.feature-card', {
+    gsap.to('.feature-card', {
       scrollTrigger: {
         trigger: featuresRef.current,
         start: 'top center+=100',
-        toggleActions: 'play none none none'
+        toggleActions: 'play none none reverse'
       },
-      y: 50,
-      opacity: 2,
+      y: 0,
+      opacity: 1,
       duration: 0.8,
       stagger: 0.2
     });
-
+  
+    // Stats animation
+    gsap.to('.stat-card', {
+      scrollTrigger: {
+        trigger: '.stat-section',
+        start: 'top center+=100',
+        toggleActions: 'play none none reverse'
+      },
+      y: 0,
+      opacity: 1,
+      duration: 0.8,
+      stagger: 0.2
+    });
+  
     return () => {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
-
   const features = [
     {
       icon: Brain,
@@ -85,7 +109,7 @@ const Home = () => {
         <div className="max-w-4xl mx-auto text-center">
           <h1 
             ref={headingRef}
-            className="text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl"
+            className="text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl oopacity-0"
           >
             Elevate Your Writing with
             <span className="block text-blue-600">AI-Powered Essay Scoring</span>
@@ -93,14 +117,14 @@ const Home = () => {
           
           <p 
             ref={subheadingRef}
-            className="mt-6 text-xl leading-8 text-gray-600"
+            className="mt-6 text-xl leading-8 text-gray-600 opacity-0"
           >
             Get instant, professional-grade feedback on your essays using advanced machine learning technology.
           </p>
 
           <div 
             ref={ctaRef}
-            className="mt-10 flex flex-col sm:flex-row gap-4 justify-center"
+            className="mt-10 flex flex-col sm:flex-row gap-4 justify-center opacity-0"
           >
             <button
               onClick={() => navigate('/score')}
@@ -137,7 +161,7 @@ const Home = () => {
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
             <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-2">
               {features.map((feature, index) => (
-                <div key={index} className="feature-card flex flex-col bg-white rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow duration-200">
+                <div key={index} className="feature-card flex flex-col bg-white rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow duration-200 opacity-0">
                   <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
                     <feature.icon className="h-5 w-5 flex-none text-blue-600" />
                     {feature.title}
@@ -153,23 +177,26 @@ const Home = () => {
       </div>
 
       {/* Stats Section */}
-      <div className="bg-blue-50 py-16">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 text-center">
-            {[
-              { value: "98%", label: "Accuracy Rate" },
-              { value: "500k+", label: "Essays Analyzed" },
-              { value: "<2s", label: "Processing Time" }
-            ].map((stat, index) => (
-              <div key={index} className="feature-card bg-white rounded-lg p-8 shadow-lg">
-                <div className="text-4xl font-bold text-blue-600">{stat.value}</div>
-                <div className="mt-2 text-gray-600">{stat.label}</div>
-              </div>
-            ))}
-          </div>
+<div className="bg-blue-50 py-16 stat-section">
+  <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 text-center">
+      {[
+        { value: "98%", label: "Accuracy Rate" },
+        { value: "500k+", label: "Essays Analyzed" },
+        { value: "<2s", label: "Processing Time" }
+      ].map((stat, index) => (
+        <div 
+          key={index} 
+          className="stat-card bg-white rounded-lg p-8 shadow-lg transform hover:scale-105 transition-transform duration-200"
+        >
+          <div className="text-4xl font-bold text-blue-600">{stat.value}</div>
+          <div className="mt-2 text-gray-600">{stat.label}</div>
         </div>
-      </div>
+      ))}
     </div>
+  </div>
+</div>
+  </div>
   );
 };
 
