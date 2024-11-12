@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Brain, PenTool, CheckCircle, Star } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-gsap.registerPlugin(ScrollTrigger);
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -76,6 +75,7 @@ const Home = () => {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
+
   const features = [
     {
       icon: Brain,
@@ -100,7 +100,7 @@ const Home = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-200">
       {/* Hero Section */}
       <div 
         ref={heroRef}
@@ -109,15 +109,15 @@ const Home = () => {
         <div className="max-w-4xl mx-auto text-center">
           <h1 
             ref={headingRef}
-            className="text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl oopacity-0"
+            className="text-5xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-6xl opacity-0"
           >
             Elevate Your Writing with
-            <span className="block text-blue-600">AI-Powered Essay Scoring</span>
+            <span className="block text-blue-600 dark:text-blue-400">AI-Powered Essay Scoring</span>
           </h1>
           
           <p 
             ref={subheadingRef}
-            className="mt-6 text-xl leading-8 text-gray-600 opacity-0"
+            className="mt-6 text-xl leading-8 text-gray-600 dark:text-gray-300 opacity-0"
           >
             Get instant, professional-grade feedback on your essays using advanced machine learning technology.
           </p>
@@ -128,14 +128,14 @@ const Home = () => {
           >
             <button
               onClick={() => navigate('/score')}
-              className="inline-flex items-center px-6 py-3 text-lg font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors duration-200"
+              className="inline-flex items-center px-6 py-3 text-lg font-semibold text-white bg-blue-600 dark:bg-blue-500 rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-200"
             >
               Score Your Essay
               <ArrowRight className="ml-2 h-5 w-5" />
             </button>
             <button
               onClick={() => navigate('/about')}
-              className="inline-flex items-center px-6 py-3 text-lg font-semibold text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors duration-200"
+              className="inline-flex items-center px-6 py-3 text-lg font-semibold text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200"
             >
               Learn More
             </button>
@@ -146,14 +146,14 @@ const Home = () => {
       {/* Features Section */}
       <div 
         ref={featuresRef}
-        className="py-24 sm:py-32 bg-white"
+        className="py-24 sm:py-32 bg-white dark:bg-gray-900 transition-colors duration-200"
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center mb-16">
-            <h2 className="text-base font-semibold leading-7 text-blue-600">
+            <h2 className="text-base font-semibold leading-7 text-blue-600 dark:text-blue-400">
               Powerful Features
             </h2>
-            <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
               Everything you need to improve your writing
             </p>
           </div>
@@ -161,12 +161,12 @@ const Home = () => {
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
             <dl className="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-2">
               {features.map((feature, index) => (
-                <div key={index} className="feature-card flex flex-col bg-white rounded-lg p-6 shadow-lg hover:shadow-xl transition-shadow duration-200 opacity-0">
-                  <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900">
-                    <feature.icon className="h-5 w-5 flex-none text-blue-600" />
+                <div key={index} className="feature-card opacity-0 flex flex-col bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg hover:shadow-xl transition-all duration-200">
+                  <dt className="flex items-center gap-x-3 text-base font-semibold leading-7 text-gray-900 dark:text-white">
+                    <feature.icon className="h-5 w-5 flex-none text-blue-600 dark:text-blue-400" />
                     {feature.title}
                   </dt>
-                  <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600">
+                  <dd className="mt-4 flex flex-auto flex-col text-base leading-7 text-gray-600 dark:text-gray-300">
                     <p className="flex-auto">{feature.description}</p>
                   </dd>
                 </div>
@@ -177,26 +177,26 @@ const Home = () => {
       </div>
 
       {/* Stats Section */}
-<div className="bg-blue-50 py-16 stat-section">
-  <div className="max-w-7xl mx-auto px-6 lg:px-8">
-    <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 text-center">
-      {[
-        { value: "98%", label: "Accuracy Rate" },
-        { value: "500k+", label: "Essays Analyzed" },
-        { value: "<2s", label: "Processing Time" }
-      ].map((stat, index) => (
-        <div 
-          key={index} 
-          className="stat-card bg-white rounded-lg p-8 shadow-lg transform hover:scale-105 transition-transform duration-200"
-        >
-          <div className="text-4xl font-bold text-blue-600">{stat.value}</div>
-          <div className="mt-2 text-gray-600">{stat.label}</div>
+      <div className="bg-blue-50 dark:bg-gray-800 py-16 stat-section transition-colors duration-200">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 text-center">
+            {[
+              { value: "98%", label: "Accuracy Rate" },
+              { value: "500k+", label: "Essays Analyzed" },
+              { value: "<2s", label: "Processing Time" }
+            ].map((stat, index) => (
+              <div 
+                key={index} 
+                className="stat-card bg-white dark:bg-gray-700 rounded-lg p-8 shadow-lg transform hover:scale-105 transition-all duration-200 opacity-0"
+              >
+                <div className="text-4xl font-bold text-blue-600 dark:text-blue-400">{stat.value}</div>
+                <div className="mt-2 text-gray-600 dark:text-gray-300">{stat.label}</div>
+              </div>
+            ))}
+          </div>
         </div>
-      ))}
+      </div>
     </div>
-  </div>
-</div>
-  </div>
   );
 };
 
