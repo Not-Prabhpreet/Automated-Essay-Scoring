@@ -9,19 +9,43 @@ const essayTypes = [
   {
     id: 'custom',
     title: "Custom Topic",
-    description: "Write an essay on your own topic"
+    description: "Write an essay on your chosen topic",
+    prompt: "Write a well-structured essay with clear arguments and supporting evidence.",
+    wordRange: "300-600 words",
+    scoringInfo: "Your essay will be evaluated on content, organization, and language conventions.",
+    type: "Open Format"
   },
   {
-    id: 1,
-    title: "Persuasive Essay - Computers in Education",
-    prompt: "Write a letter to your local newspaper in which you state your opinion on the effects computers have on people. Persuade the readers to agree with you.",
-    wordRange: "300-600 words"
+    id: '1',
+    title: "Social Media and Mental Health",
+    prompt: "Discuss how social media affects mental well-being in today's society. Consider both positive and negative impacts.",
+    wordRange: "350-600 words",
+    scoringInfo: "Focus on developing clear arguments with specific examples and real-world evidence to support your position.",
+    type: "Persuasive Essay"
   },
   {
-    id: 2,
-    title: "Library Censorship",
-    prompt: "Write a persuasive essay to a newspaper reflecting your views on censorship in libraries. Do you believe that certain materials should be removed if they are found offensive?",
-    wordRange: "250-500 words"
+    id: '2',
+    title: "Online Education vs Traditional Classrooms",
+    prompt: "Compare and contrast online learning with traditional classroom education. Which method do you think is more effective and why?",
+    wordRange: "350-600 words",
+    scoringInfo: "Present balanced arguments, use specific examples, and consider multiple perspectives.",
+    type: "Argumentative Essay"
+  },
+  {
+    id: '3',
+    title: "Impact of Artificial Intelligence",
+    prompt: "How is AI technology affecting various aspects of our daily lives? Is this impact more beneficial or harmful to society overall?",
+    wordRange: "350-600 words",
+    scoringInfo: "Support your position with concrete examples and consider both advantages and disadvantages.",
+    type: "Analytical Essay"
+  },
+  {
+    id: '4',
+    title: "Environmental Responsibility",
+    prompt: "What role should individuals play in addressing environmental challenges? Discuss specific actions and their potential impact.",
+    wordRange: "400-650 words",
+    scoringInfo: "Provide specific solutions, explain their feasibility, and discuss their potential effectiveness.",
+    type: "Persuasive Essay"
   }
 ];
 
@@ -37,7 +61,6 @@ const Score = () => {
 
   const wordCount = essayText.trim().split(/\s+/).filter(Boolean).length;
   const selectedEssay = essayTypes.find(type => type.id === essayType);
-
   useEffect(() => {
     gsap.set(formRef.current, {
       opacity: 0,
@@ -120,9 +143,9 @@ const Score = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-200">
       <div ref={formRef} className="opacity-0">
-        {/* Essay Type Selection */}
+        {/* Essay Topic Selection */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6 transition-colors duration-200">
-          <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Select Essay Type</h2>
+          <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Choose Your Essay Topic</h2>
           <select
             value={essayType}
             onChange={(e) => {
@@ -139,7 +162,6 @@ const Score = () => {
               </option>
             ))}
           </select>
-
           {/* Custom Topic Input */}
           {essayType === 'custom' && (
             <div className="mt-4">
@@ -154,12 +176,28 @@ const Score = () => {
             </div>
           )}
 
-          {/* Prompt Display */}
-          {selectedEssay && essayType !== 'custom' && (
-            <div className="mt-4 p-4 bg-blue-50 dark:bg-gray-700 rounded-md transition-colors duration-200">
-              <h3 className="font-semibold mb-2 text-gray-900 dark:text-white">Writing Prompt:</h3>
-              <p className="text-gray-700 dark:text-gray-300">{selectedEssay.prompt}</p>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Suggested length: {selectedEssay.wordRange}</p>
+          {/* Topic Information Display */}
+          {selectedEssay && (
+            <div className="mt-6 space-y-4">
+              <div className="p-4 bg-blue-50 dark:bg-gray-700 rounded-md transition-colors duration-200">
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Writing Prompt:</h3>
+                <p className="text-gray-700 dark:text-gray-300">{selectedEssay.prompt}</p>
+                <div className="mt-4 flex items-center justify-between text-sm">
+                  <span className="text-gray-500 dark:text-gray-400">
+                    Word Range: {selectedEssay.wordRange}
+                  </span>
+                  {selectedEssay.type && (
+                    <span className="text-gray-500 dark:text-gray-400">
+                      Type: {selectedEssay.type}
+                    </span>
+                  )}
+                </div>
+              </div>
+              
+              <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-md">
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Scoring Guidelines:</h3>
+                <p className="text-gray-700 dark:text-gray-300">{selectedEssay.scoringInfo}</p>
+              </div>
             </div>
           )}
         </div>
@@ -171,7 +209,7 @@ const Score = () => {
               <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
                 {essayType === 'custom' 
                   ? `Your Essay on "${customTopic || 'Your Topic'}"` 
-                  : 'Your Essay'}
+                  : `Your Essay on "${selectedEssay.title}"`}
               </label>
               <textarea
                 value={essayText}
@@ -184,7 +222,7 @@ const Score = () => {
               />
               <div className="mt-2 flex justify-between text-sm text-gray-500 dark:text-gray-400">
                 <span>Word count: {wordCount}</span>
-                <span>Recommended: 300-600 words</span>
+                <span>Recommended: {selectedEssay.wordRange}</span>
               </div>
             </div>
 
@@ -215,11 +253,9 @@ const Score = () => {
         <div ref={resultRef} className="mt-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 opacity-0 transition-colors duration-200">
           <h2 className="text-2xl font-bold text-center mb-6 text-gray-900 dark:text-white">
             Essay Score
-            {essayType === 'custom' && (
-              <div className="text-sm font-normal text-gray-600 dark:text-gray-400 mt-1">
-                Topic: {customTopic}
-              </div>
-            )}
+            <div className="text-sm font-normal text-gray-600 dark:text-gray-400 mt-1">
+              Topic: {essayType === 'custom' ? customTopic : selectedEssay.title}
+            </div>
           </h2>
           
           <div className="text-5xl font-bold text-center text-blue-600 dark:text-blue-400 mb-8">

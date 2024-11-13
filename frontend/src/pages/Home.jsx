@@ -3,13 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Brain, PenTool, CheckCircle, Star } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import AnimatedButton from '../components/Layout/AnimatedButton';
+
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Home = () => {
   const navigate = useNavigate();
   const heroRef = useRef(null);
-  const headingRef = useRef(null);
+  const headingRef = useRef(null); 
   const subheadingRef = useRef(null);
   const ctaRef = useRef(null);
   const featuresRef = useRef(null);
@@ -122,24 +124,22 @@ const Home = () => {
             Get instant, professional-grade feedback on your essays using advanced machine learning technology.
           </p>
 
-          <div 
-            ref={ctaRef}
-            className="mt-10 flex flex-col sm:flex-row gap-4 justify-center opacity-0"
-          >
-            <button
-              onClick={() => navigate('/score')}
-              className="inline-flex items-center px-6 py-3 text-lg font-semibold text-white bg-blue-600 dark:bg-blue-500 rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-200"
-            >
-              Score Your Essay
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </button>
-            <button
-              onClick={() => navigate('/about')}
-              className="inline-flex items-center px-6 py-3 text-lg font-semibold text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200"
-            >
-              Learn More
-            </button>
-          </div>
+          <div ref={ctaRef} className="mt-10 flex flex-col sm:flex-row gap-4 justify-center opacity-0">
+  <AnimatedButton 
+    to="/score" 
+    variant="primary"
+    icon={ArrowRight}
+  >
+    Score Your Essay
+  </AnimatedButton>
+  
+  <AnimatedButton 
+    to="/about" 
+    variant="secondary"
+  >
+    Learn More
+  </AnimatedButton>
+    </div>
         </div>
       </div>
 

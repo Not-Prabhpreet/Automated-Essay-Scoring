@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
+import AnimatedLink from './AnimatedLink';
 
 const Navbar = () => {
   const location = useLocation();
@@ -27,19 +28,19 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center space-x-4">
-            <Link to="/" className={linkClass('/')}>
-              Home
-            </Link>
-            <Link to="/score" className={linkClass('/score')}>
-              Score
-            </Link>
-            <Link to="/about" className={linkClass('/about')}>
-              About
-            </Link>
-            <div className="ml-4">
-              <ThemeToggle />
-            </div>
-          </div>
+  <AnimatedLink to="/" className="px-4 py-2 text-gray-600 dark:text-gray-300">
+    Home
+  </AnimatedLink>
+  <AnimatedLink to="/score" className="px-4 py-2 text-gray-600 dark:text-gray-300">
+    Score
+  </AnimatedLink>
+  <AnimatedLink to="/about" className="px-4 py-2 text-gray-600 dark:text-gray-300">
+    About
+  </AnimatedLink>
+  <div className="ml-4">
+    <ThemeToggle />
+  </div>
+</div>
         </div>
       </div>
     </nav>
