@@ -91,7 +91,12 @@ const Score = () => {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:8000/score', {
+      const API_URL = process.env.NODE_ENV === 'production' 
+      ? 'http://backend:8000'  // for production/docker
+      : 'http://localhost:8000'; // for local development
+
+      // Then update your fetch call
+      const response = await fetch(`${API_URL}/score`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

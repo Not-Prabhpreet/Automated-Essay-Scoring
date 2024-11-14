@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="h-16 flex items-center justify-center sm:justify-between flex-wrap gap-4">
           <div className="text-gray-600 dark:text-gray-400">
-            © {new Date().getFullYear()} Essay Scorer
+            © {new Date().getFullYear()} Automated Essay Scorer
           </div>
           
           <div className="flex items-center text-gray-600 dark:text-gray-400">

@@ -1,0 +1,21 @@
+services:
+  - name: backend
+    type: web
+    env: docker
+    buildCommand: docker build -t essay-scorer-backend .
+    startCommand: docker run essay-scorer-backend
+    envVars:
+      - key: PORT
+        value: 8000
+
+  - name: frontend
+    type: web
+    env: docker
+    buildCommand: docker build -t essay-scorer-frontend ./frontend
+    startCommand: docker run -p 5173:5173 essay-scorer-frontend
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          name: backend
+          type: web
+          property: host
