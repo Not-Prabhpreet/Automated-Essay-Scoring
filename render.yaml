@@ -3,7 +3,7 @@ services:
     name: essay-scorer-backend
     env: docker
     plan: starter
-    region: oregon  # or your preferred region
+    region: oregon
     dockerfilePath: ./Dockerfile
     dockerContext: .
     envVars:
@@ -14,13 +14,11 @@ services:
 
   - type: web
     name: essay-scorer-frontend
-    env: static
-    buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: ./frontend/dist
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
+    env: docker
+    plan: starter
+    region: oregon
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
     envVars:
       - key: VITE_API_URL
         fromService:
