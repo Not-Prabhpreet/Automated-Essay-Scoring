@@ -1,21 +1,29 @@
 services:
-  - name: backend
-    type: web
+  - type: web
+    name: essay-scorer-backend
     env: docker
-    buildCommand: docker build -t essay-scorer-backend .
-    startCommand: docker run essay-scorer-backend
+    plan: starter
+    region: oregon  # or your preferred region
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     envVars:
+      - key: PYTHON_VERSION
+        value: 3.8.0
       - key: PORT
         value: 8000
 
-  - name: frontend
-    type: web
-    env: docker
-    buildCommand: docker build -t essay-scorer-frontend ./frontend
-    startCommand: docker run -p 5173:5173 essay-scorer-frontend
+  - type: web
+    name: essay-scorer-frontend
+    env: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
     envVars:
       - key: VITE_API_URL
         fromService:
-          name: backend
+          name: essay-scorer-backend
           type: web
-          property: host
+          property: url
