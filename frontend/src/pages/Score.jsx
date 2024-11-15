@@ -92,7 +92,7 @@ const Score = () => {
 
     try {
       // Update this in Score.jsx
-      const API_URL = 'https://automated-essay-scoring.onrender.com/';  // replace with your actual render URL
+      const API_URL = "https://essay-scorer-backend.onrender.com";  // Your actual backend URL'  // replace with your actual render URL
 
       // Then update your fetch call
       const response = await fetch(`${API_URL}/score`, {
