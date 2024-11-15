@@ -91,7 +91,8 @@ const Score = () => {
     setError('');
 
     try {
-      const API_URL = 'http://localhost:8000';
+      // Update this in Score.jsx
+      const API_URL = 'https://automated-essay-scoring.onrender.com/';  // replace with your actual render URL
 
       // Then update your fetch call
       const response = await fetch(`${API_URL}/score`, {
