@@ -24,4 +24,4 @@ services:
         fromService:
           name: essay-scorer-backend
           type: web
-          property: url
+          property: host  # Changed from 'url' to 'host'
