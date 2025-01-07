@@ -1,53 +1,50 @@
-Automated Essay Scoring Webapp
+# Automated Essay Scoring System
+
 A full-stack application that uses deep learning and machine learning techniques to automatically score essays and provide detailed feedback. The system combines LSTM neural networks and Random Forest models to provide accurate scoring, along with detailed feedback on various aspects of writing quality.
-Features
 
-Intelligent Essay Scoring: Uses a hybrid model combining LSTM and Random Forest for accurate scoring
-Detailed Feedback Generation: Provides specific feedback on multiple aspects:
+## Features
 
-Readability metrics
-Grammar and spelling
-Coherence and structure
-Argumentation quality
+- **Intelligent Essay Scoring**: Uses a hybrid model combining LSTM and Random Forest for accurate scoring
+- **Detailed Feedback Generation**: Provides specific feedback on multiple aspects:
+  - Readability metrics
+  - Grammar and spelling
+  - Coherence and structure 
+  - Argumentation quality
+- **Support for Multiple Essay Types**: Handles 8 different essay sets with customized scoring
+- **Modern Web Interface**: Responsive React frontend with Tailwind CSS and GSAP animations
+- **RESTful API**: FastAPI backend with comprehensive scoring endpoints
 
+## Architecture
 
-Support for Multiple Essay Types: Handles 8 different essay sets with customized scoring
-Modern Web Interface: Responsive React frontend with Tailwind CSS and GSAP animations
-RESTful API: FastAPI backend with comprehensive scoring endpoints
+### Backend
+- Python 3.8
+- FastAPI for API endpoints
+- TensorFlow/Keras for LSTM model
+- scikit-learn for Random Forest model
+- NLTK and spaCy for NLP tasks
+- Word2Vec for word embeddings
 
-Architecture
-Backend
+### Frontend
+- React
+- Tailwind CSS for styling
+- GSAP for animations
+- Responsive design
 
-Python 3.8
-FastAPI for API endpoints
-TensorFlow/Keras for LSTM model
-scikit-learn for Random Forest model
-NLTK and spaCy for NLP tasks
-Word2Vec for word embeddings
+## Installation
 
-Frontend
+### Backend Setup
 
-React
-Tailwind CSS for styling
-GSAP for animations
-Responsive design
+1. Clone the repository:
+<code> git clone https://github.com/yourusername/essay-scorer.git
+        cd essay-scorer</code>
 
-Installation
-Backend Setup
+2. Using Docker:
+<code>docker build -t essay-scorer .</code>
+<code>docker run -p 8000:8000 essay-scorer</code>
 
-Clone the repository:
-
-bashCopygit clone https://github.com/yourusername/essay-scorer.git
-cd essay-scorer
-
-Using Docker:
-
-bashCopydocker build -t essay-scorer .
-docker run -p 8000:8000 essay-scorer
-
-Manual Setup:
-
-bashCopy# Create virtual environment
+3. Manual Setup:
+<code>
+# Create virtual environment
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 
@@ -59,37 +56,40 @@ python -m nltk.downloader punkt averaged_perceptron_tagger wordnet stopwords
 
 # Download spaCy model
 python -m spacy download en_core_web_sm
-Frontend Setup
-bashCopycd frontend
+</code>
+
+### Frontend Setup:
+<code>
+cd frontend
 npm install
 npm run dev
-API Endpoints
-Main Endpoints
+</code>
 
-POST /score
+## API Endpoints:
+### Main Endpoints:
 
-Score an essay and get feedback
-Request body: {"essay": "string", "essay_set": integer}
-Returns score and detailed feedback
+-POST /score
 
-
-GET /essay-sets
-
-Get information about available essay sets
-Returns descriptions and score ranges for each essay set
+  -Score an essay and get feedback
+  -Request body: {"essay": "string", "essay_set": integer}
+  -Returns score and detailed feedback
 
 
+-GET /essay-sets
 
-Model Details
-LSTM Model
+  -Get information about available essay sets
+  -Returns descriptions and score ranges for each essay set
+
+## Model Details
+### LSTM Model
 
 Three-layer architecture with dropout
 Word2Vec embeddings input
 Trained on 12,976 essays
 
-Random Forest Model
+### Random Forest Model
 
-Features include:
+### Features include:
 
 Text statistics (word count, sentence length, etc.)
 Readability metrics
@@ -99,13 +99,13 @@ Argument structure analysis
 
 
 
-Performance Metrics
+### Performance Metrics
 
 Random Forest MSE: 0.88
 SVR MSE: 2.83
 Combined model shows improved performance over individual models
 
-Docker Support
+### Docker Support
 The project includes a Dockerfile for easy deployment. The container includes:
 
 Python 3.8 slim base
@@ -113,8 +113,8 @@ All required dependencies
 Pre-downloaded NLTK and spaCy models
 Exposed port 8000
 
-Dependencies
-Backend
+## Dependencies
+### Backend
 
 tensorflow==2.8.0
 fastapi
@@ -126,25 +126,13 @@ nltk
 spacy
 gensim
 
-Frontend
+### Frontend
 
 react
 tailwindcss
 gsap
 axios
 
-Contributing
 
-Fork the repository
-Create a feature branch
-Commit your changes
-Push to the branch
-Open a Pull Request
 
-License
-This project is licensed under the MIT License - see the LICENSE file for details.
-Acknowledgments
 
-Training data provided by the Hewlett Foundation
-NLTK and spaCy communities for NLP tools
-FastAPI and React communities for excellent documentation
