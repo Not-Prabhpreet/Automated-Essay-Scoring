@@ -6,9 +6,9 @@ A full-stack application that uses deep learning and machine learning techniques
 </br>
 <img width="700" alt="image" src="https://github.com/user-attachments/assets/ed6b3d27-3b78-4e29-baf8-42de4a82f161" />
 </br>
-<img width="731" alt="image" src="https://github.com/user-attachments/assets/607da646-acc3-4362-8bb2-f85b27681095" />
+<img width="700" alt="image" src="https://github.com/user-attachments/assets/607da646-acc3-4362-8bb2-f85b27681095" />
 </br>
-<img width="926" alt="image" src="https://github.com/user-attachments/assets/448607aa-b521-4bd3-a6bd-8898b7c2c829" />
+<img width="700" alt="image" src="https://github.com/user-attachments/assets/448607aa-b521-4bd3-a6bd-8898b7c2c829" />
 
 
 
