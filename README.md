@@ -2,6 +2,18 @@
 
 A full-stack application that uses deep learning and machine learning techniques to automatically score essays and provide detailed feedback. The system combines LSTM neural networks and Random Forest models to provide accurate scoring, along with detailed feedback on various aspects of writing quality.
 
+<img width="700" alt="image" src="https://github.com/user-attachments/assets/6f023f39-03e1-4ed2-b9e7-f6ed58b770cc" />
+</br>
+<img width="700" alt="image" src="https://github.com/user-attachments/assets/ed6b3d27-3b78-4e29-baf8-42de4a82f161" />
+</br>
+<img width="731" alt="image" src="https://github.com/user-attachments/assets/607da646-acc3-4362-8bb2-f85b27681095" />
+</br>
+<img width="926" alt="image" src="https://github.com/user-attachments/assets/448607aa-b521-4bd3-a6bd-8898b7c2c829" />
+
+
+
+
+
 ## Features
 
 - **Intelligent Essay Scoring**: Uses a hybrid model combining LSTM and Random Forest for accurate scoring
