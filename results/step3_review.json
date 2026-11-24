@@ -1,8 +1,8 @@
 {
   "large_error_definition": "|round(pred) - human| >= max(2, 0.2 * score range)",
   "kev_answers_available": {
-    "val": 0.0,
-    "test": 0.0
+    "val": 0.3138,
+    "test": 0.3349
   },
   "test_large_error_rate": 0.0288,
   "budgets": {
@@ -26,39 +26,39 @@
         }
       },
       "width_or_kev": {
-        "t_width_pct": 0.9,
-        "t_kev_pct": 0.5,
+        "t_width_pct": 1.0,
+        "t_kev_pct": 0.68,
         "val": {
-          "flagged_pct": 0.0948,
+          "flagged_pct": 0.0995,
           "large_errors": 33.0,
-          "large_errors_caught_pct": 0.1818,
-          "error_rate_unflagged": 0.023,
-          "error_rate_flagged": 0.0488
+          "large_errors_caught_pct": 0.303,
+          "error_rate_unflagged": 0.0197,
+          "error_rate_flagged": 0.0775
         },
         "test": {
-          "flagged_pct": 0.114,
+          "flagged_pct": 0.0955,
           "large_errors": 56.0,
-          "large_errors_caught_pct": 0.1607,
-          "error_rate_unflagged": 0.0272,
-          "error_rate_flagged": 0.0405
+          "large_errors_caught_pct": 0.25,
+          "error_rate_unflagged": 0.0239,
+          "error_rate_flagged": 0.0753
         }
       },
       "kev_only": {
         "t_width_pct": 1.0,
-        "t_kev_pct": 0.5,
+        "t_kev_pct": 0.68,
         "val": {
-          "flagged_pct": 0.0,
+          "flagged_pct": 0.0995,
           "large_errors": 33.0,
-          "large_errors_caught_pct": 0.0,
-          "error_rate_unflagged": 0.0254,
-          "error_rate_flagged": null
+          "large_errors_caught_pct": 0.303,
+          "error_rate_unflagged": 0.0197,
+          "error_rate_flagged": 0.0775
         },
         "test": {
-          "flagged_pct": 0.0,
+          "flagged_pct": 0.0955,
           "large_errors": 56.0,
-          "large_errors_caught_pct": 0.0,
-          "error_rate_unflagged": 0.0288,
-          "error_rate_flagged": null
+          "large_errors_caught_pct": 0.25,
+          "error_rate_unflagged": 0.0239,
+          "error_rate_flagged": 0.0753
         }
       }
     },
@@ -82,39 +82,39 @@
         }
       },
       "width_or_kev": {
-        "t_width_pct": 0.8,
-        "t_kev_pct": 0.5,
+        "t_width_pct": 0.88,
+        "t_kev_pct": 0.7,
         "val": {
           "flagged_pct": 0.192,
           "large_errors": 33.0,
-          "large_errors_caught_pct": 0.3939,
-          "error_rate_unflagged": 0.0191,
-          "error_rate_flagged": 0.0522
+          "large_errors_caught_pct": 0.4242,
+          "error_rate_unflagged": 0.0181,
+          "error_rate_flagged": 0.0562
         },
         "test": {
-          "flagged_pct": 0.2024,
+          "flagged_pct": 0.1988,
           "large_errors": 56.0,
-          "large_errors_caught_pct": 0.2321,
-          "error_rate_unflagged": 0.0277,
-          "error_rate_flagged": 0.033
+          "large_errors_caught_pct": 0.375,
+          "error_rate_unflagged": 0.0224,
+          "error_rate_flagged": 0.0543
         }
       },
       "kev_only": {
         "t_width_pct": 1.0,
-        "t_kev_pct": 0.5,
+        "t_kev_pct": 0.57,
         "val": {
-          "flagged_pct": 0.0,
+          "flagged_pct": 0.1334,
           "large_errors": 33.0,
-          "large_errors_caught_pct": 0.0,
-          "error_rate_unflagged": 0.0254,
-          "error_rate_flagged": null
+          "large_errors_caught_pct": 0.3333,
+          "error_rate_unflagged": 0.0196,
+          "error_rate_flagged": 0.0636
         },
         "test": {
-          "flagged_pct": 0.0,
+          "flagged_pct": 0.132,
           "large_errors": 56.0,
-          "large_errors_caught_pct": 0.0,
-          "error_rate_unflagged": 0.0288,
-          "error_rate_flagged": null
+          "large_errors_caught_pct": 0.375,
+          "error_rate_unflagged": 0.0207,
+          "error_rate_flagged": 0.0817
         }
       }
     },
@@ -138,39 +138,39 @@
         }
       },
       "width_or_kev": {
-        "t_width_pct": 0.76,
-        "t_kev_pct": 0.5,
+        "t_width_pct": 0.78,
+        "t_kev_pct": 0.7,
         "val": {
-          "flagged_pct": 0.2344,
+          "flagged_pct": 0.2814,
           "large_errors": 33.0,
-          "large_errors_caught_pct": 0.4545,
-          "error_rate_unflagged": 0.0181,
-          "error_rate_flagged": 0.0493
+          "large_errors_caught_pct": 0.5758,
+          "error_rate_unflagged": 0.015,
+          "error_rate_flagged": 0.0521
         },
         "test": {
-          "flagged_pct": 0.2435,
+          "flagged_pct": 0.2809,
           "large_errors": 56.0,
-          "large_errors_caught_pct": 0.2321,
-          "error_rate_unflagged": 0.0292,
-          "error_rate_flagged": 0.0274
+          "large_errors_caught_pct": 0.4107,
+          "error_rate_unflagged": 0.0236,
+          "error_rate_flagged": 0.042
         }
       },
       "kev_only": {
         "t_width_pct": 1.0,
-        "t_kev_pct": 0.5,
+        "t_kev_pct": 0.57,
         "val": {
-          "flagged_pct": 0.0,
+          "flagged_pct": 0.1334,
           "large_errors": 33.0,
-          "large_errors_caught_pct": 0.0,
-          "error_rate_unflagged": 0.0254,
-          "error_rate_flagged": null
+          "large_errors_caught_pct": 0.3333,
+          "error_rate_unflagged": 0.0196,
+          "error_rate_flagged": 0.0636
         },
         "test": {
-          "flagged_pct": 0.0,
+          "flagged_pct": 0.132,
           "large_errors": 56.0,
-          "large_errors_caught_pct": 0.0,
-          "error_rate_unflagged": 0.0288,
-          "error_rate_flagged": null
+          "large_errors_caught_pct": 0.375,
+          "error_rate_unflagged": 0.0207,
+          "error_rate_flagged": 0.0817
         }
       }
     }
