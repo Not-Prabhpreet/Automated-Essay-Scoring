@@ -1,0 +1,21 @@
+{
+  "model": "shipped LSTM + RF (saved_models/)",
+  "split": "test",
+  "n": 1947,
+  "qwk_per_set": {
+    "1": 0.8523,
+    "2": 0.5854,
+    "3": 0.463,
+    "4": 0.3344,
+    "5": 0.6527,
+    "6": 0.6439,
+    "7": 0.4147,
+    "8": 0.6836
+  },
+  "qwk_mean": 0.5787,
+  "notes": {
+    "rf_training_rows": "first 500 rows of training_set_rel3.tsv (all set 1); 73 of 268 set-1 test essays were in it",
+    "set1_qwk_excluding_rf_training_rows": 0.8235,
+    "lstm_training_data": "unknown (notebooks/ are empty); may overlap the test split"
+  }
+}
