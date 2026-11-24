@@ -4,7 +4,11 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     HF_HOME=/app/.hf \
     USE_TF=0 \
-    TOKENIZERS_PARALLELISM=false
+    TOKENIZERS_PARALLELISM=false \
+    # PyTorch threads: match the machine's vCPUs (Fly shared-cpu-1x = 1); more threads
+    # than CPUs makes every request much slower. Override with -e OMP_NUM_THREADS=N.
+    OMP_NUM_THREADS=1 \
+    MKL_NUM_THREADS=1
 
 WORKDIR /app
 
