@@ -14,9 +14,14 @@ app = FastAPI(
 )
 
 # CORS configuration
+# Allowed frontend origins: CORS_ORIGINS (comma-separated) and/or CORS_ORIGIN_REGEX.
+_origins = os.environ.get(
+    "CORS_ORIGINS", "https://essay-scorer-frontend.onrender.com,http://localhost:5173"
+)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://essay-scorer-frontend.onrender.com"],  # Your frontend URL
+    allow_origins=[o.strip() for o in _origins.split(",") if o.strip()],
+    allow_origin_regex=os.environ.get("CORS_ORIGIN_REGEX") or None,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
