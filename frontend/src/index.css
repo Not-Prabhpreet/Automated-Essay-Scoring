@@ -1,3 +1,64 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Palette: paper and ink, a forest-green accent, and a red "teacher's pen" for flags.
+   Chart colours were checked with the dataviz palette validator (light + dark). */
+@layer base {
+  :root {
+    --paper: 247 244 238;      /* #F7F4EE */
+    --surface: 255 253 248;    /* #FFFDF8 */
+    --sunk: 239 234 224;       /* #EFEAE0 */
+    --ink: 31 29 26;           /* #1F1D1A */
+    --ink2: 74 70 63;          /* #4A463F */
+    --muted: 107 102 92;       /* #6B665C */
+    --rule: 226 220 208;       /* #E2DCD0 */
+    --accent: 30 122 87;       /* #1E7A57 */
+    --accent-ink: 255 253 248;
+    --accent-soft: 227 239 232;
+    --pen: 179 67 43;          /* #B3432B */
+    --pen-soft: 247 228 221;
+    --ochre: 185 130 47;       /* #B9822F */
+    --chart-new: 30 122 87;    /* #1E7A57 */
+    --chart-base: 185 130 47;  /* #B9822F */
+    color-scheme: light;
+  }
+  .dark {
+    --paper: 22 21 19;         /* #161513 */
+    --surface: 31 29 26;       /* #1F1D1A */
+    --sunk: 41 38 34;          /* #292622 */
+    --ink: 238 233 223;
+    --ink2: 204 197 184;
+    --muted: 158 151 137;
+    --rule: 56 52 47;
+    --accent: 111 190 155;     /* #6FBE9B */
+    --accent-ink: 16 35 27;
+    --accent-soft: 30 52 43;
+    --pen: 230 128 99;         /* #E68063 */
+    --pen-soft: 64 37 30;
+    --ochre: 196 134 46;       /* #C4862E */
+    --chart-new: 47 154 114;   /* #2F9A72 */
+    --chart-base: 196 134 46;  /* #C4862E */
+    color-scheme: dark;
+  }
+
+  html { @apply bg-paper text-ink antialiased; }
+  body { @apply font-sans text-[16px] leading-relaxed; font-feature-settings: "cv11", "ss01"; }
+  h1, h2, h3 { @apply font-serif tracking-tight text-ink; font-variation-settings: "opsz" 72; }
+  ::selection { background: rgb(var(--accent) / 0.25); }
+  :focus-visible { outline: 2px solid rgb(var(--accent)); outline-offset: 2px; border-radius: 4px; }
+}
+
+@layer components {
+  .container-page { @apply mx-auto w-full max-w-6xl px-5 sm:px-8; }
+  .card { @apply rounded-xl border border-rule bg-surface; }
+  .eyebrow { @apply text-xs font-semibold uppercase tracking-[0.14em] text-muted; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-[15px] font-medium transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50; }
+  .btn-primary { @apply btn bg-accent text-accent-ink hover:bg-accent/90; }
+  .btn-secondary { @apply btn border border-rule bg-surface text-ink hover:bg-sunk; }
+  .link { @apply text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent; }
+  .num { font-variant-numeric: tabular-nums; }
+  .prose-body p { @apply mt-4 text-ink2 leading-[1.75]; }
+  .prose-body p:first-child { @apply mt-0; }
+  .prose-body code { @apply rounded bg-sunk px-1.5 py-0.5 font-mono text-[0.85em] text-ink; }
+}
