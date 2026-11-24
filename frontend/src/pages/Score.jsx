@@ -3,6 +3,9 @@ import { Loader2, AlertCircle } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+// Backend base URL: set VITE_API_URL at build time (e.g. in Vercel project settings).
+const API_URL = (import.meta.env.VITE_API_URL || "https://aes-grader-api.fly.dev").replace(/\/$/, "");
+
 gsap.registerPlugin(ScrollTrigger);
 
 const essayTypes = [
@@ -91,10 +94,6 @@ const Score = () => {
     setError('');
 
     try {
-      // Update this in Score.jsx
-      const API_URL = "https://essay-scorer-backend.onrender.com";  // Your actual backend URL'  // replace with your actual render URL
-
-      // Then update your fetch call
       const response = await fetch(`${API_URL}/score`, {
         method: 'POST',
         headers: {
