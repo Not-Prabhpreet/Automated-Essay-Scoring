@@ -114,7 +114,7 @@ class LocalEmbedder(Embedder):
 
     def _windows(self, text: str) -> List[str]:
         tok = self.st.tokenizer
-        ids = tok(text, add_special_tokens=False)["input_ids"]
+        ids = tok(text, add_special_tokens=False, verbose=False)["input_ids"]  # we window long texts ourselves
         if len(ids) <= self.max_tokens:
             return [text]
         out = []

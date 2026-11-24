@@ -1,0 +1,16 @@
+# Only the API code, the model artifact and the legacy feature code go into the image.
+.git
+.venv
+venv
+**/__pycache__
+.pytest_cache
+.env
+frontend
+cache
+data
+notebooks
+results
+saved_models
+tests
+scripts
+*.md

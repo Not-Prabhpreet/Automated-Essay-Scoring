@@ -1,14 +1,19 @@
-numpy==1.24.4
-pandas==1.4.1
-scipy==1.10.1
-spacy==3.2.0
-fastapi==0.115.4
-uvicorn==0.32.0
-pydantic==1.8.2
-tensorflow==2.8.0
-scikit-learn==1.0.2
-nltk==3.9.1
-gensim
-textblob==0.18.0.post0
-python-multipart==0.0.17
-h5py==3.11.0
+# API runtime (Python 3.12). torch is installed separately from the CPU-only index
+# (see Dockerfile); requirements-grader.txt adds evaluation/dev extras and
+# requirements-legacy.txt pins the original Python 3.8 / TensorFlow 2.8 stack.
+fastapi==0.165.0
+uvicorn==0.54.0
+pydantic==2.14.4
+numpy==2.5.5
+pandas==3.1.1
+scipy==1.18.1
+scikit-learn==1.9.1  # must match the version that pickled artifacts/grader.joblib
+joblib==1.6.0
+nltk==3.10.4
+textblob==0.20.1
+tqdm==4.70.1
+sentence-transformers==6.3.0
+transformers==5.24.0
+tokenizers==0.23.3
+huggingface-hub==2.4.0
+httpx==0.28.1

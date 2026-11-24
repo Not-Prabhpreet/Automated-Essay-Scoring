@@ -1,8 +1,9 @@
 # api/main.py
+import asyncio
 import os
+from concurrent.futures import ThreadPoolExecutor
 
 from fastapi import FastAPI, HTTPException
-from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
 from .schemas.essay import EssayRequest, EssayResponse
 from models.feedback_generator import QualityFeedback
@@ -14,9 +15,14 @@ app = FastAPI(
 )
 
 # CORS configuration
+# Allowed frontend origins: CORS_ORIGINS (comma-separated) and/or CORS_ORIGIN_REGEX.
+_origins = os.environ.get(
+    "CORS_ORIGINS", "https://essay-scorer-frontend.onrender.com,http://localhost:5173"
+)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://essay-scorer-frontend.onrender.com"],  # Your frontend URL
+    allow_origins=[o.strip() for o in _origins.split(",") if o.strip()],
+    allow_origin_regex=os.environ.get("CORS_ORIGIN_REGEX") or None,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -71,10 +77,31 @@ def _score(request: EssayRequest) -> dict:
     return result
 
 
+# All scoring runs on one dedicated worker thread. On a small (1 vCPU) machine requests
+# queue instead of fighting over the CPU, and PyTorch keeps reusing the thread pool it
+# set up on that thread instead of meeting a new thread on every request.
+_worker = ThreadPoolExecutor(max_workers=1, thread_name_prefix="scorer")
+
+
+@app.on_event("startup")
+async def _warm_up():
+    """Load the grader and run one essay before taking traffic, so the first real
+    request doesn't pay for model loading."""
+    if os.environ.get("SKIP_WARMUP"):
+        return
+
+    def warm():
+        if get_grader() is not None:
+            _score(EssayRequest(essay="This is a short warm-up essay about computers.", essay_set=1))
+
+    await asyncio.get_running_loop().run_in_executor(_worker, warm)
+
+
 @app.post("/score", response_model=EssayResponse)
 async def score_essay(request: EssayRequest):
     try:
-        return EssayResponse(**await run_in_threadpool(_score, request))
+        result = await asyncio.get_running_loop().run_in_executor(_worker, _score, request)
+        return EssayResponse(**result)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
