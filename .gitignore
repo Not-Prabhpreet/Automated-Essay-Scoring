@@ -1,0 +1,9 @@
+# local environments / secrets
+.venv/
+.env
+__pycache__/
+.pytest_cache/
+
+# recomputable caches (scripts/embed_essays.py rebuilds in minutes)
+cache/embeddings/
+cache/kev_probe.jsonl
