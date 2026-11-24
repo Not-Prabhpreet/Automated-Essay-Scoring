@@ -3,11 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Essay Scoring System</title>
+    <title>Essay Grader · scores with a range and the reasons behind them</title>
+    <meta name="description" content="An automated essay grader for the eight ASAP prompts that returns a 90% score range, the most similar human-graded essays, and a flag when a teacher should check." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
     <script>
-      // Set dark mode as default
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
+      // Theme: saved choice, else the system setting. Runs before paint to avoid a flash.
+      (function () {
+        var saved = localStorage.getItem('theme');
+        var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.classList.toggle('dark', dark);
+      })();
     </script>
   </head>
   <body>

@@ -1,33 +1,29 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Layout/NavBar';
-import Footer from './components/Layout/Footer';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { Footer, Navbar, ScrollToTop } from './components/Layout';
 import Home from './pages/Home';
-import Score from './pages/Score';
-import About from './pages/About';
-import CustomCursor from './components/Layout/CustomCursor';
-import HoverText from './components/Layout/HoverText';
+import Grade from './pages/Grade';
+import HowItWorks from './pages/HowItWorks';
 
-function App() {
+export default function App() {
   return (
-    <Router>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
-      <CustomCursor />
+    <BrowserRouter>
+      <ScrollToTop />
+      <div className="flex min-h-screen flex-col">
         <Navbar />
-        <h1>
-  
-      </h1>
         <main className="flex-1">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/score" element={<Score />} />
-            <Route path="/about" element={<About />} />
+            <Route path="/grade" element={<Grade />} />
+            <Route path="/how-it-works" element={<HowItWorks />} />
+            {/* old paths */}
+            <Route path="/score" element={<Navigate to="/grade" replace />} />
+            <Route path="/about" element={<Navigate to="/how-it-works" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
         <Footer />
       </div>
-    </Router>
+    </BrowserRouter>
   );
 }
-
-export default App;
