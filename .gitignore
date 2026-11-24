@@ -7,3 +7,5 @@ __pycache__/
 # recomputable caches (scripts/embed_essays.py rebuilds in minutes)
 cache/embeddings/
 cache/kev_probe.jsonl
+.vercel
+.env*
