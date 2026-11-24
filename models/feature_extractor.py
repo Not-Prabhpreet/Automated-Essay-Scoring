@@ -7,7 +7,73 @@ from nltk import pos_tag
 from textblob import TextBlob
 import re
 from collections import Counter
+from functools import lru_cache
 from tqdm import tqdm  # for progress bar
+from nltk.tokenize import regexp_tokenize
+from textblob import Word
+from textblob.en import spelling as _spelling
+
+# TextBlob.correct() splits text into these tokens and corrects each one
+# (textblob/blob.py, BaseBlob.correct).
+_BLOB_TOKEN = r"\w+|[^\w\s]|\s"
+_PUNCTUATION = ".,;:!?()[]{}`''\"@#$^&*+-|=~_"  # textblob/_text.py PUNCTUATION
+
+
+def _misspelled_reference(word):
+    """The original check: TextBlob's full spelling correction of the word."""
+    return str(TextBlob(word).correct()) != word
+
+
+@lru_cache(maxsize=200000)
+def _token_corrected(token):
+    return str(Word(token).correct()) != token
+
+
+_KNOWN = None
+
+
+def _known_words():
+    global _KNOWN
+    if _KNOWN is None:
+        if len(_spelling) == 0:
+            _spelling.load()
+        _KNOWN = frozenset(dict.keys(_spelling))
+    return _KNOWN
+
+
+@lru_cache(maxsize=200000)
+def _has_correction(token):
+    """For a lowercase token that is not a dictionary word: does Spelling.suggest()
+    find any dictionary word within edit distance 2? Uses TextBlob's own _edit1, but
+    plain-set membership and an early exit instead of building every candidate."""
+    known = _known_words()
+    e1 = _spelling._edit1(token)
+    if any(w in known for w in e1):
+        return True
+    return any(w in known for a in e1 for w in _spelling._edit1(a))
+
+
+def is_misspelled(word):
+    """Same answer as _misspelled_reference, but fast.
+
+    Spelling.suggest() (textblob/_text.py) returns a token unchanged when it is one
+    character, punctuation, whitespace, a number, or a dictionary word. Otherwise it
+    returns the most probable dictionary word within edit distance 1, else 2, else the
+    token itself. So an unknown *lowercase* token comes back changed exactly when some
+    dictionary word is within edit distance 2; we test that existence directly.
+    Title-case tokens (whose suggestions are re-capitalised) and anything else unusual
+    go through the original correction. tests/test_spelling.py checks equality with
+    the reference on real essays.
+    """
+    known = _known_words()
+    for tok in regexp_tokenize(word, _BLOB_TOKEN):
+        if (len(tok) == 1 or tok in _PUNCTUATION or tok.isspace()
+                or tok.replace(".", "").isdigit() or tok in known):
+            continue
+        changed = _has_correction(tok) if tok.islower() and not tok.istitle() else _token_corrected(tok)
+        if changed:
+            return True
+    return False
 
 class FeatureExtractor(BaseEstimator, TransformerMixin):
     """Enhanced feature extraction for essay scoring"""
@@ -79,10 +145,8 @@ class FeatureExtractor(BaseEstimator, TransformerMixin):
             
             # Use TextBlob for spell checking
             for word in words:
-                if len(word) > 2:
-                    blob_word = TextBlob(word)
-                    if str(blob_word.correct()) != word:
-                        misspelled += 1
+                if len(word) > 2 and is_misspelled(word):
+                    misspelled += 1
             
             return {
                 'grammar_errors': 0,
