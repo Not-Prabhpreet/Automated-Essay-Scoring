@@ -74,9 +74,16 @@ def test_graded_essay_never_retrieves_itself(splits):
 
     art = joblib.load(ART)
     g = Grader(art)
+    from grader.data import load_asap
+
+    df = load_asap().set_index("essay_id")
     s = 3
     si = art.index.sets[s]
     for j in range(5):
-        res = g.grade("unused", s, emb=si.vecs[j], style=np.zeros((1, len(art.style_columns))),
-                      kev=None, exclude_id=int(si.ids[j]))
-        assert int(si.ids[j]) not in [n["essay_id"] for n in res["similar_essays"]]
+        eid = int(si.ids[j])
+        # without exclusion a training essay finds itself first ...
+        res = g.grade(df.loc[eid, "essay"], s)
+        assert res["similar_essays"][0]["essay_id"] == eid
+        # ... and with its id excluded it never appears
+        res = g.grade(df.loc[eid, "essay"], s, exclude_id=eid)
+        assert eid not in [n["essay_id"] for n in res["similar_essays"]]
