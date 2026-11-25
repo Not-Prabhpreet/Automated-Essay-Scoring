@@ -23,13 +23,6 @@ const FEATURES = [
   { icon: Flag, title: 'A flag when it’s unsure', text: 'Essays whose range is unusually wide for their prompt are marked for a teacher to read instead of trusting the number.' },
 ];
 
-const LIMITS = [
-  'It only knows the eight ASAP prompts. An essay on any other topic gets an unreliable score.',
-  'Scores reflect how 2012 raters graded students in grades 7–10. It isn’t a judge of writing in general.',
-  'The review flag catches about a third of large errors while flagging a fifth of essays, so an unflagged score can still be wrong.',
-  'For practice and research, not for grades that matter to a student.',
-];
-
 export default function Home() {
   const prompt = promptById(EXAMPLE.essay_set);
   return (
@@ -93,23 +86,6 @@ export default function Home() {
             Read how the model, features and ranges work <ArrowRight className="h-4 w-4" />
           </Link>
         </p>
-      </section>
-
-      <section className="container-page">
-        <div className="card grid gap-8 p-8 sm:p-10 lg:grid-cols-[1fr_1.4fr]">
-          <div>
-            <p className="eyebrow">Honest limits</p>
-            <h2 className="mt-2 text-3xl font-semibold">What it can’t do</h2>
-          </div>
-          <ul className="space-y-3">
-            {LIMITS.map((l) => (
-              <li key={l} className="flex gap-3 text-ink2">
-                <span className="mt-[11px] h-1.5 w-1.5 shrink-0 rounded-full bg-pen" />
-                <span>{l}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
       </section>
     </>
   );
