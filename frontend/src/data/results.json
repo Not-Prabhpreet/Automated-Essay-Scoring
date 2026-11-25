@@ -35,41 +35,50 @@
    }
   },
   "deployed": {
-   "label": "Embeddings + style features (ridge)",
-   "mean": 0.7465,
+   "label": "TF-IDF + style features (ridge)",
+   "mean": 0.7466,
    "perSet": {
-    "1": 0.8416,
-    "2": 0.6496,
-    "3": 0.6086,
-    "4": 0.7891,
-    "5": 0.8056,
-    "6": 0.7968,
-    "7": 0.7693,
-    "8": 0.7114
+    "1": 0.8504,
+    "2": 0.6421,
+    "3": 0.6067,
+    "4": 0.8078,
+    "5": 0.7985,
+    "6": 0.8054,
+    "7": 0.76,
+    "8": 0.7016
    }
   },
-  "variants": {
-   "ridge": 0.6657,
-   "ridge+style": 0.7465,
-   "mlp": 0.5577,
-   "mlp+style": 0.6027,
-   "style-only RF (retrained per set)": 0.7018
+  "ablations": {
+   "original LSTM + RF (baseline)": 0.5787,
+   "style features only (ridge)": 0.6836,
+   "TF-IDF only (ridge)": 0.6799,
+   "TF-IDF + style (ridge), deployed": 0.7466
+  },
+  "alphas": {
+   "1": 3.0,
+   "2": 1.0,
+   "3": 10.0,
+   "4": 1.0,
+   "5": 10.0,
+   "6": 0.3,
+   "7": 0.3,
+   "8": 0.3
   }
  },
  "conformal": {
   "target": 0.9,
-  "coverage": 0.9147,
-  "widthFrac": 0.2238,
+  "coverage": 0.9076,
+  "widthFrac": 0.2162,
   "k": 25,
   "beta": 0.1,
   "plain": {
-   "test_coverage_overall": 0.9055,
-   "test_mean_width_frac_of_range": 0.2117
+   "test_coverage_overall": 0.9009,
+   "test_mean_width_frac_of_range": 0.2081
   },
   "perSet": {
    "1": {
-    "coverage": 0.9515,
-    "width": 2.0784,
+    "coverage": 0.9216,
+    "width": 1.8022,
     "range": [
      2,
      12
@@ -78,8 +87,8 @@
     "nTest": 268
    },
    "2": {
-    "coverage": 0.9,
-    "width": 0.663,
+    "coverage": 0.9111,
+    "width": 0.7074,
     "range": [
      1,
      6
@@ -88,8 +97,8 @@
     "nTest": 270
    },
    "3": {
-    "coverage": 0.8837,
-    "width": 0.7868,
+    "coverage": 0.8798,
+    "width": 0.7946,
     "range": [
      0,
      3
@@ -98,8 +107,8 @@
     "nTest": 258
    },
    "4": {
-    "coverage": 0.9057,
-    "width": 0.7585,
+    "coverage": 0.9094,
+    "width": 0.7321,
     "range": [
      0,
      3
@@ -108,8 +117,8 @@
     "nTest": 265
    },
    "5": {
-    "coverage": 0.9225,
-    "width": 0.6974,
+    "coverage": 0.9557,
+    "width": 0.7565,
     "range": [
      0,
      4
@@ -118,8 +127,8 @@
     "nTest": 271
    },
    "6": {
-    "coverage": 0.9407,
-    "width": 0.9185,
+    "coverage": 0.9333,
+    "width": 0.8111,
     "range": [
      0,
      4
@@ -128,8 +137,8 @@
     "nTest": 270
    },
    "7": {
-    "coverage": 0.8983,
-    "width": 7.8644,
+    "coverage": 0.8559,
+    "width": 7.5508,
     "range": [
      0,
      24
@@ -138,8 +147,8 @@
     "nTest": 236
    },
    "8": {
-    "coverage": 0.9083,
-    "width": 12.6697,
+    "coverage": 0.8532,
+    "width": 11.6697,
     "range": [
      0,
      60
@@ -150,152 +159,29 @@
   }
  },
  "review": {
-  "largeErrorRate": 0.0288,
-  "largeErrors": 56.0,
-  "kevCoverage": 0.3349,
-  "at20": {
-   "width_only": {
-    "flagged": 0.2024,
-    "caught": 0.2321
+  "largeErrorRate": 0.0282,
+  "largeErrors": 55,
+  "budgets": {
+   "0.1": {
+    "flagged": 0.0904,
+    "caught": 0.1636
    },
-   "width_or_kev": {
-    "flagged": 0.1988,
-    "caught": 0.375
+   "0.2": {
+    "flagged": 0.1941,
+    "caught": 0.3273
    },
-   "kev_only": {
-    "flagged": 0.132,
-    "caught": 0.375
-   }
-  }
- },
- "kev": {
-  "model": "jaredpalmer/kev-0.8b@v1.0 (zero-shot, CPU, float32)",
-  "split": "test",
-  "traits": {
-   "7": {
-    "n": 236,
-    "scale": [
-     0,
-     3
-    ],
-    "per_trait": {
-     "ideas": {
-      "qwk_kev_vs_rater1": 0.009,
-      "qwk_kev_vs_rater2": 0.039,
-      "qwk_rater1_vs_rater2": 0.79,
-      "kev_mean": 1.877,
-      "human_mean": 1.729,
-      "kev_mean_confidence": 0.206
-     },
-     "organization": {
-      "qwk_kev_vs_rater1": 0.07,
-      "qwk_kev_vs_rater2": 0.096,
-      "qwk_rater1_vs_rater2": 0.616,
-      "kev_mean": 1.678,
-      "human_mean": 1.936,
-      "kev_mean_confidence": 0.041
-     },
-     "style": {
-      "qwk_kev_vs_rater1": 0.033,
-      "qwk_kev_vs_rater2": 0.069,
-      "qwk_rater1_vs_rater2": 0.506,
-      "kev_mean": 1.97,
-      "human_mean": 1.958,
-      "kev_mean_confidence": 0.209
-     },
-     "conventions": {
-      "qwk_kev_vs_rater1": 0.003,
-      "qwk_kev_vs_rater2": 0.034,
-      "qwk_rater1_vs_rater2": 0.515,
-      "kev_mean": 1.996,
-      "human_mean": 2.229,
-      "kev_mean_confidence": 0.266
-     }
-    }
-   },
-   "8": {
-    "n": 109,
-    "scale": [
-     1,
-     6
-    ],
-    "per_trait": {
-     "ideas_and_content": {
-      "qwk_kev_vs_rater1": 0.264,
-      "qwk_kev_vs_rater2": 0.239,
-      "qwk_rater1_vs_rater2": 0.518,
-      "kev_mean": 4.211,
-      "human_mean": 3.725,
-      "kev_mean_confidence": 0.139
-     },
-     "organization": {
-      "qwk_kev_vs_rater1": 0.266,
-      "qwk_kev_vs_rater2": 0.233,
-      "qwk_rater1_vs_rater2": 0.56,
-      "kev_mean": 3.642,
-      "human_mean": 3.688,
-      "kev_mean_confidence": 0.091
-     },
-     "voice": {
-      "qwk_kev_vs_rater1": 0.341,
-      "qwk_kev_vs_rater2": 0.348,
-      "qwk_rater1_vs_rater2": 0.493,
-      "kev_mean": 4.211,
-      "human_mean": 3.844,
-      "kev_mean_confidence": 0.15
-     },
-     "word_choice": {
-      "qwk_kev_vs_rater1": 0.146,
-      "qwk_kev_vs_rater2": 0.199,
-      "qwk_rater1_vs_rater2": 0.592,
-      "kev_mean": 4.688,
-      "human_mean": 3.743,
-      "kev_mean_confidence": 0.129
-     },
-     "sentence_fluency": {
-      "qwk_kev_vs_rater1": 0.138,
-      "qwk_kev_vs_rater2": 0.089,
-      "qwk_rater1_vs_rater2": 0.579,
-      "kev_mean": 4.477,
-      "human_mean": 3.642,
-      "kev_mean_confidence": 0.155
-     },
-     "conventions": {
-      "qwk_kev_vs_rater1": 0.161,
-      "qwk_kev_vs_rater2": 0.128,
-      "qwk_rater1_vs_rater2": 0.528,
-      "kev_mean": 3.936,
-      "human_mean": 3.495,
-      "kev_mean_confidence": 0.196
-     }
-    }
+   "0.3": {
+    "flagged": 0.2604,
+    "caught": 0.4364
    }
   },
-  "composite": {
-   "1": {
-    "n": 268,
-    "of": 268,
-    "qwk_vs_resolved": 0.228,
-    "spearman_vs_resolved": 0.278
-   },
-   "2": {
-    "n": 39,
-    "of": 270,
-    "qwk_vs_resolved": 0.093,
-    "spearman_vs_resolved": 0.25
-   },
-   "7": {
-    "n": 236,
-    "of": 236,
-    "qwk_vs_resolved": 0.083,
-    "spearman_vs_resolved": 0.139
-   },
-   "8": {
-    "n": 109,
-    "of": 109,
-    "qwk_vs_resolved": 0.237,
-    "spearman_vs_resolved": 0.245
-   }
+  "at20": {
+   "flagged": 0.1941,
+   "caught": 0.3273
   }
+ },
+ "speed": {
+  "inProcessMedianMs": 15.7146,
+  "inProcessP90Ms": 34.0147
  }
 }
