@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AlertTriangle, CheckCircle2, ChevronDown, Info } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, ChevronDown } from 'lucide-react';
 
 const pct = (v, lo, hi) => ((v - lo) / (hi - lo)) * 100;
 
@@ -46,10 +46,7 @@ export function ReviewBadge({ needsReview, reasons }) {
       </span>
     );
   }
-  const text = {
-    wide_range: 'the score range is unusually wide',
-    kev_disagrees: 'the rubric model disagrees with the score',
-  };
+  const text = { wide_range: 'the score range is unusually wide' };
   return (
     <span className="inline-flex items-center gap-1.5 rounded-full bg-pen-soft px-3 py-1 text-sm font-medium text-pen">
       <AlertTriangle className="h-4 w-4" /> Worth a teacher’s look: {reasons.map((r) => text[r] || r).join(' and ')}
@@ -57,11 +54,7 @@ export function ReviewBadge({ needsReview, reasons }) {
   );
 }
 
-const TRAIT_NAMES = {
-  holistic: 'Holistic', language_conventions: 'Language conventions', ideas: 'Ideas', organization: 'Organization',
-  style: 'Style', conventions: 'Conventions', ideas_and_content: 'Ideas and content', voice: 'Voice',
-  word_choice: 'Word choice', sentence_fluency: 'Sentence fluency',
-};
+const RANK = ['Closest match', '2nd closest', '3rd closest'];
 
 function SimilarEssay({ n, i }) {
   const [open, setOpen] = useState(false);
@@ -69,7 +62,7 @@ function SimilarEssay({ n, i }) {
     <li className="rounded-lg border border-rule bg-paper/60 p-4">
       <div className="flex items-baseline justify-between gap-2">
         <span className="whitespace-nowrap text-sm text-ink2">Human score <span className="num text-base font-semibold text-ink">{n.score}</span></span>
-        <span className="whitespace-nowrap text-xs text-muted num">{Math.round(n.similarity * 100)}% similar</span>
+        <span className="whitespace-nowrap text-xs text-muted" title={`Cosine similarity of word TF-IDF vectors: ${n.similarity.toFixed(3)}`}>{RANK[i] ?? `#${i + 1}`}</span>
       </div>
       <p className={`mt-2 text-sm leading-relaxed text-ink2 ${open ? '' : 'line-clamp-3'}`}>{cleanText(n.excerpt)}</p>
       <button onClick={() => setOpen(!open)} className="mt-1 text-xs text-accent hover:underline" aria-expanded={open}
@@ -118,20 +111,6 @@ export function ScoreResult({ result, prompt, humanScore, compact = false }) {
         </div>
       )}
 
-      {!compact && result.trait_scores && (
-        <section>
-          <h3 className="text-lg font-semibold">Rubric traits (Kev)</h3>
-          <ul className="mt-3 grid gap-2 sm:grid-cols-2">
-            {Object.entries(result.trait_scores).map(([k, t]) => (
-              <li key={k} className="flex items-center justify-between rounded-lg border border-rule px-3 py-2 text-sm">
-                <span className="text-ink2">{TRAIT_NAMES[k] || k}</span>
-                <span className="num font-medium">{t.score.toFixed(1)} <span className="text-xs text-muted">conf {Math.round(t.confidence * 100)}%</span></span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
       {!compact && feedback.length > 0 && (
         <section>
           <h3 className="text-lg font-semibold">Writing feedback</h3>
@@ -150,20 +129,13 @@ export function ScoreResult({ result, prompt, humanScore, compact = false }) {
       {result.similar_essays?.length > 0 && (
         <section>
           <h3 className="text-lg font-semibold">{compact ? 'Closest human-graded essays' : 'Evidence: the closest human-graded essays'}</h3>
-          {!compact && <p className="mt-1 text-sm text-muted">Training essays for the same prompt with the most similar embeddings, and the score human raters gave them.</p>}
+          {!compact && <p className="mt-1 text-sm text-muted">Training essays for the same prompt that share the most distinctive words and phrases with this one, and the score human raters gave them.</p>}
           <ol className={`mt-3 grid gap-3 ${compact ? '' : 'md:grid-cols-3'}`}>
             {result.similar_essays.slice(0, compact ? 2 : 3).map((n, i) => <SimilarEssay key={n.essay_id} n={n} i={i} />)}
           </ol>
         </section>
       )}
 
-      {!compact && result.trait_scores == null && result.range && (
-        <p className="flex items-start gap-2 rounded-lg bg-sunk px-4 py-3 text-sm text-ink2">
-          <Info className="mt-0.5 h-4 w-4 shrink-0 text-muted" />
-          Rubric-trait scores come from Kev, a separate decision model. It runs offline in the evaluation and is turned off on this
-          live server, so this result has no trait scores. <a className="link" href="/how-it-works#kev">Why?</a>
-        </p>
-      )}
     </div>
   );
 }
