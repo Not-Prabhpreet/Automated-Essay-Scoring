@@ -1,10 +1,8 @@
 # Evaluation / development extras on top of the API runtime (Python 3.12).
 -r requirements.txt
-torch==2.15.0
 pytest>=8.0
+httpx>=0.27       # FastAPI TestClient
 psutil>=5.9
-python-dotenv>=1.0
-openai>=1.30      # only for EMBEDDING_BACKEND=openai
 tensorflow>=2.16  # only to evaluate the legacy LSTM (scripts/baseline.py)
 tf-keras          # reads the legacy Keras 2 .h5 model
 gensim            # legacy Word2Vec features
