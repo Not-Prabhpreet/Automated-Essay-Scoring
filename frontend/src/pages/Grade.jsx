@@ -16,6 +16,7 @@ export default function Grade() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [result, setResult] = useState(null);
+  const [elapsed, setElapsed] = useState(null);
   const resultRef = useRef(null);
   const prompt = promptById(setId);
   const words = essay.trim() ? essay.trim().split(/\s+/).length : 0;
@@ -30,6 +31,7 @@ export default function Grade() {
   const submit = async (e) => {
     e.preventDefault();
     setLoading(true); setError(''); setResult(null);
+    const started = performance.now();
     try {
       const res = await fetch(`${API_URL}/score`, {
         method: 'POST',
@@ -41,6 +43,7 @@ export default function Grade() {
         throw new Error(res.status === 422 ? 'The essay needs at least 10 characters.' : body.detail || `Server error (${res.status})`);
       }
       setResult(await res.json());
+      setElapsed((performance.now() - started) / 1000);
       setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
     } catch (err) {
       setError(err.message === 'Failed to fetch' ? 'Could not reach the grading server. Try again in a moment.' : err.message);
@@ -103,10 +106,11 @@ export default function Grade() {
               </button>
             </div>
             <textarea id="essay" value={essay} onChange={(e) => setEssay(e.target.value)} required minLength={10}
+              onKeyDown={(e) => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); e.currentTarget.form.requestSubmit(); } }}
               placeholder="Start writing, or load a sample…"
               className="mt-3 h-72 w-full resize-y rounded-lg border border-rule bg-paper p-4 text-[15px] leading-relaxed text-ink placeholder:text-muted focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/25" />
             <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-              <span className="text-sm text-muted num">{words} words</span>
+              <span className="text-sm text-muted num">{words} words <span className="hidden sm:inline">· Ctrl + Enter to grade</span></span>
               <button type="submit" className="btn-primary" disabled={loading || essay.trim().length < 10}>
                 {loading ? (<><Loader2 className="h-4 w-4 animate-spin" /> Grading…</>) : 'Grade essay'}
               </button>
@@ -128,6 +132,7 @@ export default function Grade() {
 
           {result && (
             <div ref={resultRef} className="card scroll-mt-24 p-6">
+              {elapsed != null && <p className="mb-4 text-right text-xs text-muted num">Graded in {elapsed.toFixed(2)} s</p>}
               <ScoreResult result={result} prompt={prompt} humanScore={humanScore} />
             </div>
           )}
