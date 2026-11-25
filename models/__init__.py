@@ -4,7 +4,7 @@ from .feedback_generator import QualityFeedback
 
 def __getattr__(name):
     # EssayScorer pulls in TensorFlow/Keras; import it only when someone asks for it,
-    # so the API (which only needs feedback + the embedding grader) starts without TF.
+    # so the API (which only needs feedback + the grader) starts without TF.
     if name == "EssayScorer":
         from .essay_scorer import EssayScorer
 

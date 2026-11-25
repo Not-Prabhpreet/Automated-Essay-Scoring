@@ -17,26 +17,16 @@ class ScoreRange(BaseModel):
     high_normalized: float = Field(..., description="high on the 0-10 scale used by `score`")
 
 
-class TraitScore(BaseModel):
-    score: float = Field(..., description="Kev's expected rubric level, on the rater's scale")
-    confidence: float = Field(..., description="Kev score confidence (0-1; not an accuracy rate)")
-
-
 class SimilarEssay(BaseModel):
     essay_id: int
     score: int = Field(..., description="Human (resolved) score of the training essay")
-    similarity: float = Field(..., description="Cosine similarity of the embeddings")
+    similarity: float = Field(..., description="Cosine similarity of the word TF-IDF vectors")
     excerpt: str
 
 
 class ScaleInfo(BaseModel):
     min: int
     max: int
-
-
-class KevScore(BaseModel):
-    score: float
-    confidence: float
 
 
 class EssayResponse(BaseModel):
@@ -47,9 +37,6 @@ class EssayResponse(BaseModel):
     raw_score: Optional[int] = Field(None, description="Predicted score on the set's native scale")
     score_scale: Optional[ScaleInfo] = None
     range: Optional[ScoreRange] = Field(None, description="90% conformal score range")
-    trait_scores: Optional[Dict[str, TraitScore]] = Field(
-        None, description="Kev rubric-trait scores; null when no Kev server is configured")
-    kev_score: Optional[KevScore] = None
     needs_review: Optional[bool] = Field(None, description="True when a human should check this score")
     review_reasons: List[str] = Field(default_factory=list)
     similar_essays: List[SimilarEssay] = Field(default_factory=list)
