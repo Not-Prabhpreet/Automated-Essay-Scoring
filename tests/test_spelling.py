@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 
 from grader.data import load_asap
-from models.feature_extractor import _misspelled_reference, is_misspelled
+from models.feature_extractor import _has_correction, _has_correction_reference, _misspelled_reference, is_misspelled
 
 TRICKY = ["the", "teh", "recieve", "computers,", "@caps1", "1st", "don't", "...", "Hello",
           "xqzvbn", "u", "lol!!", "co-operate", "3.5", "_", "naïve", "mispelled", "@percent1"]
@@ -21,6 +21,16 @@ def test_matches_reference_on_real_essay_words():
     essays = df.essay.iloc[rng.choice(len(df), 8, replace=False)]
     words = [w for e in essays for w in e.lower().split() if len(w) > 2]
     assert [is_misspelled(w) for w in words] == [_misspelled_reference(w) for w in words]
+
+
+def test_distance_two_check_matches_brute_force():
+    """The deletion-index check equals TextBlob's _edit1 applied twice."""
+    rng = np.random.default_rng(11)
+    letters = list("abcdefghijklmnopqrstuvwxyz0123456789")
+    words = ["teh", "recieve", "becuase", "zzzzzz", "xqzvbnm", "caps1", "qwertyuiop", "computr", "a1b2"]
+    words += ["".join(rng.choice(letters, rng.integers(2, 11))) for _ in range(60)]
+    for w in words:
+        assert _has_correction.__wrapped__(w) == _has_correction_reference(w), w
 
 
 def test_matches_cached_original_features():

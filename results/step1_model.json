@@ -1,0 +1,32 @@
+{
+  "model": "word (1-2) + char (2-5) TF-IDF + 20 style features -> ridge, one per prompt",
+  "selected_by": "val QWK (ridge alpha per prompt)",
+  "test_mean": 0.7466,
+  "val_mean": 0.7749,
+  "test_per_set": {
+    "1": 0.8504,
+    "2": 0.6421,
+    "3": 0.6067,
+    "4": 0.8078,
+    "5": 0.7985,
+    "6": 0.8054,
+    "7": 0.76,
+    "8": 0.7016
+  },
+  "alpha_per_set": {
+    "1": 3.0,
+    "2": 1.0,
+    "3": 10.0,
+    "4": 1.0,
+    "5": 10.0,
+    "6": 0.3,
+    "7": 0.3,
+    "8": 0.3
+  },
+  "ablations_test_mean": {
+    "original LSTM + RF (baseline)": 0.5787,
+    "style features only (ridge)": 0.6836,
+    "TF-IDF only (ridge)": 0.6799,
+    "TF-IDF + style (ridge), deployed": 0.7466
+  }
+}

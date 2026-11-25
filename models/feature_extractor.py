@@ -41,16 +41,59 @@ def _known_words():
     return _KNOWN
 
 
-@lru_cache(maxsize=200000)
-def _has_correction(token):
-    """For a lowercase token that is not a dictionary word: does Spelling.suggest()
-    find any dictionary word within edit distance 2? Uses TextBlob's own _edit1, but
-    plain-set membership and an early exit instead of building every candidate."""
+def _has_correction_reference(token):
+    """Edit-distance-2 existence by brute force (TextBlob's _edit1 applied twice).
+    Kept to check the fast version against; ~250k lookups for an unknown token."""
     known = _known_words()
     e1 = _spelling._edit1(token)
     if any(w in known for w in e1):
         return True
     return any(w in known for a in e1 for w in _spelling._edit1(a))
+
+
+_DELETES = None  # (any single deletion of a dictionary word, {(position, deletion)})
+
+
+def _delete_index():
+    """One-character deletions of every dictionary word, plain and keyed by position."""
+    global _DELETES
+    if _DELETES is None:
+        plain, positional = set(), set()
+        for w in _known_words():
+            for i in range(len(w)):
+                d = w[:i] + w[i + 1:]
+                plain.add(d)
+                positional.add(f"{i}\x00{d}")
+        _DELETES = (frozenset(plain), frozenset(positional))
+    return _DELETES
+
+
+def _known_within_one_edit(e):
+    """Is some dictionary word reachable from e by one of TextBlob's edits (delete any
+    character, swap two neighbours, replace or insert a letter), or equal to e?
+    Dictionary words are all a-z, so these checks match _edit1(e) & known exactly."""
+    known = _known_words()
+    plain, positional = _delete_index()
+    if e in known or e in plain:                       # same word / insert a letter into e
+        return True
+    for i in range(len(e)):
+        d = e[:i] + e[i + 1:]
+        if d in known or f"{i}\x00{d}" in positional:  # delete e[i] / replace e[i]
+            return True
+        if i + 1 < len(e) and e[:i] + e[i + 1] + e[i] + e[i + 2:] in known:  # swap
+            return True
+    return False
+
+
+@lru_cache(maxsize=200000)
+def _has_correction(token):
+    """For a lowercase token that is not a dictionary word: does Spelling.suggest()
+    find any dictionary word within edit distance 2 (TextBlob's _edit1 applied twice)?
+
+    The first edit is enumerated with TextBlob's own _edit1 (~500 strings); the second
+    is answered with the deletion index instead of enumerating ~500 more per string.
+    tests/test_spelling.py checks it against _has_correction_reference."""
+    return any(_known_within_one_edit(e) for e in _spelling._edit1(token))
 
 
 def is_misspelled(word):

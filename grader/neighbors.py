@@ -1,9 +1,9 @@
-"""Nearest scored training essays (cosine similarity over embeddings).
+"""Nearest scored training essays (cosine similarity over TF-IDF vectors).
 
 The index only ever contains the *train* split, so an essay from val/calib/test can
 never retrieve itself or its own score. For essays that are in the index (training
 essays), `query(..., exclude_ids=...)` drops the essay's own id; tests check both.
-Embeddings are L2-normalised, so cosine similarity is a dot product.
+Vectors are L2-normalised (dense or scipy sparse), so cosine similarity is a dot product.
 """
 from __future__ import annotations
 
@@ -11,13 +11,15 @@ from dataclasses import dataclass
 from typing import Dict, List, Optional, Sequence
 
 import numpy as np
+import scipy.sparse as sp
+from sklearn.preprocessing import normalize
 
 
 @dataclass
 class SetIndex:
     ids: np.ndarray        # essay_id per row
     scores: np.ndarray     # resolved human score per row
-    vecs: np.ndarray       # (n, d), L2-normalised
+    vecs: object           # (n, d) rows L2-normalised; ndarray or csr_matrix
     excerpts: List[str]
 
 
@@ -26,8 +28,8 @@ class NeighborIndex:
         self.sets: Dict[int, SetIndex] = {}
 
     def add_set(self, essay_set: int, ids, scores, vecs, essays: Sequence[str], excerpt_chars: int = 280):
-        vecs = np.asarray(vecs, dtype=np.float32)
-        vecs = vecs / (np.linalg.norm(vecs, axis=1, keepdims=True) + 1e-12)
+        vecs = sp.csr_matrix(vecs, dtype=np.float32) if sp.issparse(vecs) else np.asarray(vecs, dtype=np.float32)
+        vecs = normalize(vecs)
         self.sets[essay_set] = SetIndex(
             ids=np.asarray(ids, dtype=int),
             scores=np.asarray(scores, dtype=int),
@@ -43,9 +45,13 @@ class NeighborIndex:
         exclude_ids[i] (if given) is removed from query i's results.
         """
         idx = self.sets[essay_set]
-        q = np.atleast_2d(np.asarray(q, dtype=np.float32))
-        q = q / (np.linalg.norm(q, axis=1, keepdims=True) + 1e-12)
+        if sp.issparse(q):
+            q = normalize(sp.csr_matrix(q, dtype=np.float32))
+        else:
+            q = normalize(np.atleast_2d(np.asarray(q, dtype=np.float32)))
         sims = q @ idx.vecs.T
+        sims = sims.toarray() if sp.issparse(sims) else np.asarray(sims)
+        sims = sims.astype(np.float64)
         if exclude_ids is not None:
             for i, eid in enumerate(exclude_ids):
                 if eid is not None:

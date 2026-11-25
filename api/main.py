@@ -2,16 +2,32 @@
 import asyncio
 import os
 from concurrent.futures import ThreadPoolExecutor
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from .schemas.essay import EssayRequest, EssayResponse
 from models.feedback_generator import QualityFeedback
 
+@asynccontextmanager
+async def lifespan(app):
+    """Load the grader and run one essay before taking traffic, so the first real
+    request doesn't pay for model loading."""
+    if not os.environ.get("SKIP_WARMUP"):
+        def warm():
+            if get_grader() is not None:
+                # the typo makes the spelling check build its lookup index now
+                _score(EssayRequest(essay="A short warm-up esay about computers.", essay_set=1))
+
+        await asyncio.get_running_loop().run_in_executor(_worker, warm)
+    yield
+
+
 app = FastAPI(
     title="Essay Scoring System",
     description="Automated essay scoring and feedback API",
-    version="1.1.0"
+    version="1.2.0",
+    lifespan=lifespan,
 )
 
 # CORS configuration
@@ -28,9 +44,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 # Initialize models.
-# The grader (embeddings + per-set head + conformal range + evidence) is used when its
-# artifact exists; otherwise /score falls back to the original LSTM + RF scorer and the
-# added fields are left empty. Kev trait feedback is used only when KEV_URL is set.
+# The grader (TF-IDF + style features per prompt, conformal range, similar essays) is used
+# when its artifact exists; otherwise /score falls back to the original LSTM + RF scorer
+# and the added fields are left empty.
 feedback_gen = QualityFeedback()
 _grader = None
 _legacy = None
@@ -43,12 +59,7 @@ def get_grader():
 
         if not os.path.exists(ARTIFACT_PATH):
             return None
-        kev = None
-        if os.environ.get("KEV_URL"):
-            from grader.kev import KevClient
-
-            kev = KevClient(os.environ["KEV_URL"])
-        _grader = Grader.load(ARTIFACT_PATH, kev_client=kev)
+        _grader = Grader.load(ARTIFACT_PATH)
     return _grader
 
 
@@ -77,24 +88,9 @@ def _score(request: EssayRequest) -> dict:
     return result
 
 
-# All scoring runs on one dedicated worker thread. On a small (1 vCPU) machine requests
-# queue instead of fighting over the CPU, and PyTorch keeps reusing the thread pool it
-# set up on that thread instead of meeting a new thread on every request.
+# All scoring runs on one dedicated worker thread, so on a small (1 vCPU) machine
+# requests queue instead of fighting over the CPU.
 _worker = ThreadPoolExecutor(max_workers=1, thread_name_prefix="scorer")
-
-
-@app.on_event("startup")
-async def _warm_up():
-    """Load the grader and run one essay before taking traffic, so the first real
-    request doesn't pay for model loading."""
-    if os.environ.get("SKIP_WARMUP"):
-        return
-
-    def warm():
-        if get_grader() is not None:
-            _score(EssayRequest(essay="This is a short warm-up essay about computers.", essay_set=1))
-
-    await asyncio.get_running_loop().run_in_executor(_worker, warm)
 
 
 @app.post("/score", response_model=EssayResponse)

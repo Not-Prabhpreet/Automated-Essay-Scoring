@@ -1,21 +1,21 @@
 {
-  "plain_for_comparison": {
-    "test_coverage_overall": 0.9055,
-    "test_mean_width_frac_of_range": 0.2117
-  },
   "target_coverage": 0.9,
   "method": "normalized",
   "k": 25,
   "beta": 0.1,
-  "test_coverage_overall": 0.9147,
-  "test_mean_width_frac_of_range": 0.2238,
+  "test_coverage_overall": 0.9076,
+  "test_mean_width_frac_of_range": 0.2162,
+  "plain_for_comparison": {
+    "test_coverage_overall": 0.9009,
+    "test_mean_width_frac_of_range": 0.2081
+  },
   "per_set": {
     "1": {
       "n_calib": 267,
       "n_test": 268,
-      "coverage": 0.9515,
-      "mean_width_points": 2.0784,
-      "mean_width_frac_of_range": 0.2078,
+      "coverage": 0.9216,
+      "mean_width_points": 1.8022,
+      "mean_width_frac_of_range": 0.1802,
       "score_range": [
         2,
         12
@@ -24,9 +24,9 @@
     "2": {
       "n_calib": 270,
       "n_test": 270,
-      "coverage": 0.9,
-      "mean_width_points": 0.663,
-      "mean_width_frac_of_range": 0.1326,
+      "coverage": 0.9111,
+      "mean_width_points": 0.7074,
+      "mean_width_frac_of_range": 0.1415,
       "score_range": [
         1,
         6
@@ -35,9 +35,9 @@
     "3": {
       "n_calib": 259,
       "n_test": 258,
-      "coverage": 0.8837,
-      "mean_width_points": 0.7868,
-      "mean_width_frac_of_range": 0.2623,
+      "coverage": 0.8798,
+      "mean_width_points": 0.7946,
+      "mean_width_frac_of_range": 0.2649,
       "score_range": [
         0,
         3
@@ -46,9 +46,9 @@
     "4": {
       "n_calib": 266,
       "n_test": 265,
-      "coverage": 0.9057,
-      "mean_width_points": 0.7585,
-      "mean_width_frac_of_range": 0.2528,
+      "coverage": 0.9094,
+      "mean_width_points": 0.7321,
+      "mean_width_frac_of_range": 0.244,
       "score_range": [
         0,
         3
@@ -57,9 +57,9 @@
     "5": {
       "n_calib": 271,
       "n_test": 271,
-      "coverage": 0.9225,
-      "mean_width_points": 0.6974,
-      "mean_width_frac_of_range": 0.1744,
+      "coverage": 0.9557,
+      "mean_width_points": 0.7565,
+      "mean_width_frac_of_range": 0.1891,
       "score_range": [
         0,
         4
@@ -68,9 +68,9 @@
     "6": {
       "n_calib": 270,
       "n_test": 270,
-      "coverage": 0.9407,
-      "mean_width_points": 0.9185,
-      "mean_width_frac_of_range": 0.2296,
+      "coverage": 0.9333,
+      "mean_width_points": 0.8111,
+      "mean_width_frac_of_range": 0.2028,
       "score_range": [
         0,
         4
@@ -79,9 +79,9 @@
     "7": {
       "n_calib": 235,
       "n_test": 236,
-      "coverage": 0.8983,
-      "mean_width_points": 7.8644,
-      "mean_width_frac_of_range": 0.3277,
+      "coverage": 0.8559,
+      "mean_width_points": 7.5508,
+      "mean_width_frac_of_range": 0.3146,
       "score_range": [
         0,
         24
@@ -90,9 +90,9 @@
     "8": {
       "n_calib": 108,
       "n_test": 109,
-      "coverage": 0.9083,
-      "mean_width_points": 12.6697,
-      "mean_width_frac_of_range": 0.2112,
+      "coverage": 0.8532,
+      "mean_width_points": 11.6697,
+      "mean_width_frac_of_range": 0.1945,
       "score_range": [
         0,
         60
@@ -104,50 +104,50 @@
       "kind": "plain",
       "k": null,
       "beta": null,
-      "val_cov": 0.9153,
-      "val_width_unit": 0.2151
+      "val_cov": 0.9044,
+      "val_width_unit": 0.2072
     },
     {
       "kind": "normalized",
       "k": 10,
       "beta": 0.02,
-      "val_cov": 0.919,
-      "val_width_unit": 0.2459
+      "val_cov": 0.9167,
+      "val_width_unit": 0.2326
     },
     {
       "kind": "normalized",
       "k": 10,
       "beta": 0.05,
-      "val_cov": 0.9193,
-      "val_width_unit": 0.2385
+      "val_cov": 0.9151,
+      "val_width_unit": 0.2286
     },
     {
       "kind": "normalized",
       "k": 10,
       "beta": 0.1,
-      "val_cov": 0.916,
-      "val_width_unit": 0.2258
+      "val_cov": 0.9094,
+      "val_width_unit": 0.2225
     },
     {
       "kind": "normalized",
       "k": 25,
       "beta": 0.02,
-      "val_cov": 0.9205,
-      "val_width_unit": 0.2294
+      "val_cov": 0.9196,
+      "val_width_unit": 0.2235
     },
     {
       "kind": "normalized",
       "k": 25,
       "beta": 0.05,
-      "val_cov": 0.9227,
-      "val_width_unit": 0.2268
+      "val_cov": 0.9122,
+      "val_width_unit": 0.2167
     },
     {
       "kind": "normalized",
       "k": 25,
       "beta": 0.1,
-      "val_cov": 0.9174,
-      "val_width_unit": 0.2213
+      "val_cov": 0.9101,
+      "val_width_unit": 0.213
     }
   ]
 }
