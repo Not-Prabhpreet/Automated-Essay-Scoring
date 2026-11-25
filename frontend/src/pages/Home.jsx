@@ -13,20 +13,20 @@ const STATS = [
   { value: fmt(R.qwk.deployed.mean, 3), label: 'Agreement with human raters', note: `Mean QWK over 8 prompts. The original model scored ${fmt(R.qwk.baseline.mean, 3)}.` },
   { value: pctf(R.conformal.coverage), label: 'True scores inside the 90% range', note: `On ${R.dataset.splits.test.toLocaleString()} held-out test essays.` },
   { value: R.dataset.essays.toLocaleString(), label: 'Human-scored essays', note: 'From the ASAP dataset, grades 7 to 10.' },
-  { value: '~1 s', label: 'Per essay', note: 'Median on the live server (1 shared CPU).' },
+  { value: '~0.1 s', label: 'Per essay', note: 'Typical response from the live server, network included.' },
 ];
 
 const FEATURES = [
   { icon: Scale, title: 'A score on the real rubric scale', text: 'Each prompt keeps its own scale (1–6, 0–24, 0–60…) and its own model, trained on essays for that prompt.' },
   { icon: Ruler, title: 'A range, not just a number', text: 'Conformal prediction turns past errors into a range that contains the human score about 90% of the time.' },
   { icon: BookOpenCheck, title: 'Evidence you can check', text: 'The three most similar essays that humans graded, with their scores, so you can see what the model is comparing to.' },
-  { icon: Flag, title: 'A flag when it’s unsure', text: 'Essays with unusually wide ranges are marked for a teacher to read instead of trusting the number.' },
+  { icon: Flag, title: 'A flag when it’s unsure', text: 'Essays whose range is unusually wide for their prompt are marked for a teacher to read instead of trusting the number.' },
 ];
 
 const LIMITS = [
   'It only knows the eight ASAP prompts. An essay on any other topic gets an unreliable score.',
   'Scores reflect how 2012 raters graded students in grades 7–10. It isn’t a judge of writing in general.',
-  'The review flag is weak on its own: at a 20% flag rate it catches about a quarter of large errors (more when the rubric model is switched on).',
+  'The review flag catches about a third of large errors while flagging a fifth of essays, so an unflagged score can still be wrong.',
   'For practice and research, not for grades that matter to a student.',
 ];
 
@@ -90,7 +90,7 @@ export default function Home() {
         </div>
         <p className="mt-12">
           <Link to="/how-it-works" className="link inline-flex items-center gap-1.5">
-            Read how the models, embeddings and ranges work <ArrowRight className="h-4 w-4" />
+            Read how the model, features and ranges work <ArrowRight className="h-4 w-4" />
           </Link>
         </p>
       </section>

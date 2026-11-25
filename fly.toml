@@ -1,6 +1,8 @@
 # Fly.io config for the scoring API (https://fly.io/docs/reference/configuration/)
 app = "aes-grader-api"
 primary_region = "yyz"
+# swap as a safety margin: the API uses ~350 MB of the 512 MB machine
+swap_size_mb = 512
 
 [build]
   dockerfile = "Dockerfile"

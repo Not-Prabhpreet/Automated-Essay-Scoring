@@ -31,11 +31,11 @@ def load(name):
 
 def main():
     os.makedirs(OUT, exist_ok=True)
-    base, heads = load("baseline.json"), load("step1_heads.json")
-    conf, review, kev = load("step3_conformal.json"), load("step3_review.json"), load("step2_kev.json")
-    dep = heads["deployed"]
+    base, model = load("baseline.json"), load("step1_model.json")
+    conf, review, speed = load("step3_conformal.json"), load("step3_review.json"), load("speed.json")
     df = load_with_splits()
     split_sizes = df.split.value_counts().to_dict()
+    at20 = review["budgets"]["0.2"]
 
     results = {
         "dataset": {"essays": int(len(df)), "sets": len(SETS), "splits": {k: int(v) for k, v in split_sizes.items()}},
@@ -43,9 +43,10 @@ def main():
             "sets": [str(s) for s in SETS],
             "baseline": {"label": "Original LSTM + Random Forest", "mean": base["qwk_mean"],
                          "perSet": base["qwk_per_set"]},
-            "deployed": {"label": "Embeddings + style features (ridge)", "mean": heads["variants"][dep]["test_mean"],
-                         "perSet": heads["variants"][dep]["test_per_set"]},
-            "variants": {k: v["test_mean"] for k, v in heads["variants"].items()},
+            "deployed": {"label": "TF-IDF + style features (ridge)", "mean": model["test_mean"],
+                         "perSet": model["test_per_set"]},
+            "ablations": model["ablations_test_mean"],
+            "alphas": model["alpha_per_set"],
         },
         "conformal": {
             "target": conf["target_coverage"], "coverage": conf["test_coverage_overall"],
@@ -57,12 +58,12 @@ def main():
         },
         "review": {
             "largeErrorRate": review["test_large_error_rate"],
-            "largeErrors": review["budgets"]["0.2"]["width_only"]["test"]["large_errors"],
-            "kevCoverage": review["kev_answers_available"]["test"],
-            "at20": {k: {"flagged": v["test"]["flagged_pct"], "caught": v["test"]["large_errors_caught_pct"]}
-                     for k, v in review["budgets"]["0.2"].items()},
+            "largeErrors": review["test_large_errors"],
+            "budgets": {b: {"flagged": v["test"]["flagged_pct"], "caught": v["test"]["large_errors_caught_pct"]}
+                        for b, v in review["budgets"].items()},
+            "at20": {"flagged": at20["test"]["flagged_pct"], "caught": at20["test"]["large_errors_caught_pct"]},
         },
-        "kev": kev,
+        "speed": {"inProcessMedianMs": speed["median_ms"], "inProcessP90Ms": speed["p90_ms"]},
     }
     with open(os.path.join(OUT, "results.json"), "w") as f:
         json.dump(results, f, indent=1)

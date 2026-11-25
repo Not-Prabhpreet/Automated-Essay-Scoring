@@ -1,0 +1,52 @@
+{
+ "essay_id": 17969,
+ "words": [
+  [
+   "location3",
+   0.235
+  ],
+  [
+   "to location3",
+   0.197
+  ],
+  [
+   "mood",
+   0.186
+  ],
+  [
+   "eat",
+   0.152
+  ],
+  [
+   "bored",
+   0.14
+  ]
+ ],
+ "chars": [
+  [
+   "mood",
+   0.096
+  ],
+  [
+   "paite",
+   0.092
+  ],
+  [
+   "aiten",
+   0.092
+  ],
+  [
+   "moo",
+   0.092
+  ]
+ ],
+ "the": 0.041,
+ "style": {
+  "word_count": 59,
+  "spelling_errors": 5,
+  "unique_words_ratio": 0.73
+ },
+ "columns": 37630,
+ "nonzero": 950,
+ "chars_note": "top letter-only character n-grams (3+ letters)"
+}

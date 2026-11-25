@@ -48,30 +48,61 @@ function Frame({ children, caption, minW = 720, viewBox }) {
 export function PipelineDiagram() {
   const m = 'arrow-pipeline';
   return (
-    <Frame viewBox="0 0 900 380" caption="What happens to one essay. Solid boxes run on the live server; Kev (dashed) runs offline in the evaluation.">
+    <Frame viewBox="0 0 900 300" caption="What happens to one essay. Everything runs on the server in about a tenth of a second.">
       <Defs id={m} />
-      <Box x={10} y={150} w={150} h={60} title="Essay + prompt" sub="one of 8 ASAP sets" tone="sunk" />
-      <Box x={215} y={60} w={200} h={60} title="bge-small embedding" sub="384 numbers per essay" />
-      <Box x={215} y={190} w={200} h={60} title="Style features" sub="20: length, spelling, vocabulary" />
-      <Box x={465} y={60} w={200} h={60} title="Ridge head" sub="one per prompt" tone="accent" />
-      <Box x={465} y={190} w={200} h={60} title="Nearest training essays" sub="cosine similarity" />
-      <Box x={465} y={305} w={200} h={60} title="Kev rubric model" sub="one question per trait" dashed />
-      <Box x={715} y={20} w={175} h={48} title="Score" tone="accent" />
-      <Box x={715} y={100} w={175} h={60} title="90% range" sub="score ± q · σ" tone="accent" />
-      <Box x={715} y={190} w={175} h={48} title="Similar essays" />
-      <Box x={715} y={275} w={175} h={60} title="needs_review" sub="wide range or Kev disagrees" tone="pen" />
-      <Arrow m={m} d="M160 170 C185 170 190 90 213 90" />
-      <Arrow m={m} d="M160 190 C185 190 190 220 213 220" />
-      <Arrow m={m} d="M415 90 H463" />
-      <Arrow m={m} d="M415 220 C440 220 440 100 463 100" />
-      <Arrow m={m} d="M330 120 C330 160 540 150 560 188" />
-      <Arrow m={m} d="M665 80 C690 80 690 44 713 44" />
-      <Arrow m={m} d="M665 100 C690 100 690 125 713 125" />
-      <Arrow m={m} d="M665 210 C690 210 690 140 713 140" label="σ from neighbours" lx={705} ly={183} />
-      <Arrow m={m} d="M665 225 C690 225 690 214 713 214" />
-      <Arrow m={m} d="M802 160 V273" />
-      <Arrow m={m} d="M665 335 C690 335 690 310 713 310" dashed />
-      <Arrow m={m} d="M85 210 V335 H463" dashed />
+      <Box x={10} y={120} w={150} h={60} title="Essay + prompt" sub="one of 8 ASAP sets" tone="sunk" />
+      <Box x={215} y={40} w={200} h={60} title="TF-IDF" sub="word + character n-grams" />
+      <Box x={215} y={200} w={200} h={60} title="Style features" sub="20: length, spelling, vocabulary" />
+      <Box x={465} y={40} w={200} h={60} title="Ridge model" sub="one per prompt" tone="accent" />
+      <Box x={465} y={200} w={200} h={60} title="Nearest training essays" sub="cosine similarity of word TF-IDF" />
+      <Box x={715} y={10} w={175} h={48} title="Score" tone="accent" />
+      <Box x={715} y={90} w={175} h={60} title="90% range" sub="score ± q · σ" tone="accent" />
+      <Box x={715} y={180} w={175} h={48} title="Similar essays" />
+      <Box x={715} y={240} w={175} h={56} title="needs_review" sub="range unusually wide" tone="pen" />
+      <Arrow m={m} d="M160 140 C185 140 190 70 213 70" />
+      <Arrow m={m} d="M160 160 C185 160 190 230 213 230" />
+      <Arrow m={m} d="M415 70 H463" />
+      <Arrow m={m} d="M415 230 C440 230 440 85 463 85" />
+      <Arrow m={m} d="M330 100 C330 150 545 150 560 198" />
+      <Arrow m={m} d="M665 60 C690 60 690 34 713 34" />
+      <Arrow m={m} d="M665 80 C690 80 690 115 713 115" />
+      <Arrow m={m} d="M665 215 C690 215 690 135 713 135" label="σ from neighbours" lx={700} ly={172} />
+      <Arrow m={m} d="M665 235 C690 235 690 204 713 204" />
+      <Arrow m={m} d="M890 150 C900 190 900 230 892 262" />
+    </Frame>
+  );
+}
+
+export function FeaturesDiagram({ example }) {
+  const m = 'arrow-features';
+  const maxW = Math.max(...example.words.map(([, w]) => w));
+  const Bar = ({ x, y, label, w }) => (
+    <g>
+      <text x={x} y={y + 12} className="fill-ink2 text-[12.5px]">{label}</text>
+      <rect x={x + 100} y={y + 2} width={Math.max((w / maxW) * 120, 3)} height={12} rx="3" className="fill-accent" />
+      <text x={x + 106 + (w / maxW) * 120} y={y + 12} className="fill-muted text-[11px] num">{w.toFixed(2)}</text>
+    </g>
+  );
+  const st = example.style;
+  return (
+    <Frame viewBox="0 0 900 250" minW={720}
+      caption={`Real weights for sample essay #${example.essay_id} (set 7, the patience prompt). Highest-weighted word n-grams, highest letter-only character n-grams (“paite”, “aiten” come from the misspelling “paitent”), and three of the 20 style features. ASAP replaced names and places with placeholders such as @LOCATION3, so those become terms too. “the” gets only ${example.the.toFixed(2)}: every essay uses it.`}>
+      <Defs id={m} />
+      <Box x={10} y={100} w={150} h={60} title="One essay" sub="the student’s text" tone="sunk" />
+      <text x={200} y={20} className="fill-ink text-[13.5px] font-semibold">Word n-grams (TF-IDF)</text>
+      {example.words.map(([l, w], i) => <Bar key={l} x={200} y={30 + i * 22} label={l} w={w} />)}
+      <text x={480} y={20} className="fill-ink text-[13.5px] font-semibold">Character n-grams (TF-IDF)</text>
+      {example.chars.map(([l, w], i) => <Bar key={l + i} x={480} y={30 + i * 22} label={`“${l.trim()}”`} w={w} />)}
+      <text x={200} y={176} className="fill-ink text-[13.5px] font-semibold">Style features</text>
+      <text x={200} y={198} className="fill-ink2 text-[12.5px]">words (stop words removed): <tspan className="fill-ink font-semibold num">{st.word_count}</tspan></text>
+      <text x={200} y={216} className="fill-ink2 text-[12.5px]">likely misspellings (in those words): <tspan className="fill-ink font-semibold num">{st.spelling_errors}</tspan></text>
+      <text x={200} y={234} className="fill-ink2 text-[12.5px]">unique-word ratio: <tspan className="fill-ink font-semibold num">{st.unique_words_ratio}</tspan></text>
+      <Arrow m={m} d="M160 120 C180 120 180 60 196 60" />
+      <Arrow m={m} d="M160 140 C180 140 180 196 196 196" />
+      <Box x={745} y={100} w={145} h={60} title="Ridge model" sub="weighted sum → score" tone="accent" />
+      <Arrow m={m} d="M720 80 C735 80 735 115 743 115" />
+      <Arrow m={m} d="M560 208 C700 208 715 150 743 145" />
+      <text x={480} y={234} className="fill-muted text-[12px] num">{`${example.columns.toLocaleString()} columns for this prompt; ${example.nonzero.toLocaleString()} non-zero here`}</text>
     </Frame>
   );
 }
@@ -108,39 +139,6 @@ export function SplitDiagram({ splits }) {
   );
 }
 
-export function WindowDiagram() {
-  const m = 'arrow-window';
-  const tokens = Array.from({ length: 44 }, (_, i) => i);
-  return (
-    <Frame viewBox="0 0 900 250" minW={680}
-      caption="Long essays don’t fit the model’s 512-token window, so they are cut into overlapping windows (510 tokens, step 384). Each window is embedded, the vectors are averaged (weighted by length) and normalised.">
-      <Defs id={m} />
-      <text x={20} y={22} className="fill-muted text-[12px]">essay tokens (set 8 essays average ~800)</text>
-      {tokens.map((i) => <rect key={i} x={20 + i * 19.5} y={32} width={16} height={22} rx="3" className="fill-sunk stroke-rule" />)}
-      {[[0, 26, 'window 1'], [19, 44, 'window 2']].map(([a, b, label], j) => (
-        <g key={label}>
-          <path d={`M${20 + a * 19.5} ${66 + j * 16} h${(b - a) * 19.5 - 3}`} className="stroke-accent" strokeWidth="3" strokeLinecap="round" />
-          <text x={20 + a * 19.5} y={84 + j * 16 + (j ? 4 : 0)} className="fill-ink2 text-[12px]">{label}</text>
-        </g>
-      ))}
-      <Arrow m={m} d="M280 112 V140" />
-      <Arrow m={m} d="M640 112 V140" />
-      {[[200, 'vector 1'], [560, 'vector 2']].map(([x, label]) => (
-        <g key={label}>
-          {Array.from({ length: 12 }, (_, i) => (
-            <rect key={i} x={x + i * 13} y={146} width={11} height={22} rx="2" className="fill-accent"
-              opacity={0.25 + ((i * 37 + x) % 70) / 100} />
-          ))}
-          <text x={x} y={186} className="fill-muted text-[12px]">{label} · 384 numbers</text>
-        </g>
-      ))}
-      <Arrow m={m} d="M370 160 C430 160 430 215 455 215" />
-      <Arrow m={m} d="M560 160 C505 160 505 215 478 215" />
-      <Box x={385} y={200} w={160} h={40} title="average + normalise" tone="accent" />
-    </Frame>
-  );
-}
-
 export function ConformalDiagram() {
   // Schematic: sorted calibration errors (normalised), the 90% quantile q, and a new essay.
   const errs = Array.from({ length: 40 }, (_, i) => Math.pow((i + 1) / 41, 1.6) * 2.4);
@@ -169,44 +167,6 @@ export function ConformalDiagram() {
       <path d="M600 146 h180" className="stroke-muted" strokeWidth="1.2" markerEnd={`url(#${m})`} markerStart={`url(#${m})`} />
       <text x={690} y={166} textAnchor="middle" className="fill-ink2 text-[12.5px]">score ± q · σ(essay)</text>
       <text x={690} y={186} textAnchor="middle" className="fill-muted text-[12px]">σ = 0.1 × scale + spread of the 25 nearest training essays’ scores</text>
-    </Frame>
-  );
-}
-
-export function KevDiagram({ example }) {
-  const traits = Object.entries(example.traits);
-  const m = 'arrow-kev';
-  return (
-    <Frame viewBox="0 0 900 345" minW={720}
-      caption={`Real Kev output for test essay #${example.essay_id} (set 7). Both human raters gave 2 on every trait. Kev’s most likely level is usually right here, but its probability is spread over all four levels: that spread is why its agreement with raters is low.`}>
-      <Defs id={m} />
-      <Box x={10} y={40} w={175} h={64} title="State: the essay" sub="read once, cached" tone="sunk" />
-      <Box x={10} y={130} w={175} h={84} title="4 score questions" sub="rubric levels 0–3 as options" />
-      <text x={97} y={200} textAnchor="middle" className="fill-muted text-[11.5px]">wording from the ASAP rubric</text>
-      <Box x={230} y={70} w={190} h={110} title="Qwen3.5-0.8B" sub="+ LoRA adapter" tone="accent" />
-      <text x={325} y={160} textAnchor="middle" className="fill-muted text-[11.5px]">pointer head scores</text>
-      <text x={325} y={173} textAnchor="middle" className="fill-muted text-[11.5px]">each option, no generation</text>
-      <Arrow m={m} d="M185 72 C205 72 205 110 228 110" />
-      <Arrow m={m} d="M185 172 C205 172 205 140 228 140" />
-      <Arrow m={m} d="M420 125 H458" />
-      <text x={470} y={22} className="fill-ink text-[13.5px] font-semibold">Probability of each rubric level</text>
-      {traits.map(([name, t], r) => {
-        const y = 40 + r * 70;
-        return (
-          <g key={name}>
-            <text x={470} y={y + 22} className="fill-ink2 text-[12.5px]">{name[0].toUpperCase() + name.slice(1)}</text>
-            {Object.entries(t.probs).map(([lvl, p], i) => (
-              <g key={lvl}>
-                <rect x={650 + i * 56} y={y + 42 - p * 95} width={40} height={Math.max(p * 95, 1)} rx="3"
-                  className={Number(lvl) === t.human[0] ? 'fill-accent' : 'fill-ochre'} opacity={Number(lvl) === t.human[0] ? 1 : 0.55} />
-                <text x={670 + i * 56} y={y + 56} textAnchor="middle" className="fill-muted text-[11px]">{lvl}</text>
-              </g>
-            ))}
-            <text x={470} y={y + 40} className="fill-muted text-[11.5px] num">E = {t.expected.toFixed(2)} · conf {t.confidence.toFixed(2)}</text>
-          </g>
-        );
-      })}
-      <text x={470} y={336} className="fill-muted text-[11.5px]">green bar = the level both human raters chose</text>
     </Frame>
   );
 }
